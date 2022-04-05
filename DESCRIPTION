@@ -1,0 +1,14 @@
+Package: DescendMethods
+Type: Package
+Title: What the Package Does Using Title Case
+Version: 1.0
+Date: 2022-04-05
+Author: lucapresicce
+Maintainer: lucapresicce <l.presicce@campus.unimib.it>
+Description: More details about what the package does. See
+         <http://cran.r-project.org/doc/manuals/r-release/R-exts.html#The-DESCRIPTION-file>
+         for details on how to write this part.
+License: GPL (>= 2)
+Suggests: tinytest
+Imports: Rcpp (>= 1.0.6)
+LinkingTo: Rcpp, RcppEigen
