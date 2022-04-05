@@ -1,4 +1,3 @@
-
 #' hello : 
 #' @export
 hello <- function(txt = "world") {

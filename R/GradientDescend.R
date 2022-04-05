@@ -6,18 +6,20 @@
 #' @param tol 
 #' @param maxit 
 #' @param verb 
+#' @param check_loss 
 #'
 #' @return
 #' @export
 #' @import tictoc beepr
 #'
 #' @examples
-gd <- function(data,
+GradD <- function(data,
                stepsize = 1e-4, # suggested : 0.1*(1/nrow(X))
                init = NULL,
                tol = 1e-4,
                maxit = 1e3L,
-               verb = F) {
+               verb = F,
+               check_loss = F) {
   
   ## 0 - input controls
   
@@ -50,6 +52,8 @@ gd <- function(data,
   }
   
   beta_old <- as.matrix(init)
+  if(check_loss) loss_old <- t(X %*% beta_old - Y) %*% (X %*% beta_old - Y)
+  
   
   tictoc::tic()
   for (iter in 1:maxit) {
@@ -59,15 +63,22 @@ gd <- function(data,
     
     ## 3 - update
     beta_new <- beta_old - (stepsize * grad)
+    loss_new <- t(X %*% beta_new - Y) %*% (X %*% beta_new - Y)
     
-    ## 4 - iterate
-    err <- max(abs(beta_new - beta_old))
+    ## 4 - error computation
+    if(!check_loss){
+      err <- max(abs(beta_new - beta_old))
+    } else {
+      err <- max(abs(loss_new - loss_old))
+      loss_old <- loss_new
+    }
     
+    ## 5 - iterate
     beta_old <- beta_new
     
     if(verb) cat('\n Not reached yet the minimum, at the step: ', iter, ' the error is: ', err)
     
-    ## 5 - stop rule
+    ## 6 - stop rule
     if(err < tol) {
       if(verb) beepr::beep(1)
       Sys.sleep(2)

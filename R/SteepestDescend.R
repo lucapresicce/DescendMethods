@@ -1,21 +1,18 @@
 #' Steepest Descend
 #'
-#' @param data 
-#' @param init 
-#' @param tol 
-#' @param maxit 
-#' @param verb 
+#' @inheritParams GradD
 #'
 #' @return
 #' @export
 #' @import tictoc beepr
 #'
 #' @examples
-sdg <- function(data,
+SteepD <- function(data,
                init = NULL,
                tol = 1e-4,
                maxit = 1e3L,
-               verb = F) {
+               verb = F,
+               check_loss = F) {
   
   ## 0 - input controls
   
@@ -46,6 +43,7 @@ sdg <- function(data,
   }
   
   beta_old <- as.matrix(init)
+  if(check_loss) loss_old <- t(X %*% beta_old - Y) %*% (X %*% beta_old - Y)
   
   # compute hessian
   hes <- 4 * (t(X) %*% X)
@@ -59,15 +57,23 @@ sdg <- function(data,
     ## 3 - update
     step <- sum(grad^2) / (t(grad) %*% hes %*% grad)
     beta_new <- beta_old - (as.double(step) * grad)
+    loss_new <- t(X %*% beta_new - Y) %*% (X %*% beta_new - Y)
     
-    ## 4 - iterate
-    err <- max(abs(beta_new - beta_old))
+    ## 4 - error computation
+    if(!check_loss){
+      err <- max(abs(beta_new - beta_old))
+    } else {
+      err <- max(abs(loss_new - loss_old))
+      loss_old <- loss_new
+    }
     
+    ## 5 - iterate
     beta_old <- beta_new
+    
     
     if(verb) cat('\n Not reached yet the minimum, at the step: ', iter, ' the error is: ', err)
     
-    ## 5 - stop rule
+    ## 6 - stop rule
     if(err < tol) {
       if(verb) beepr::beep(1)
       Sys.sleep(2)
