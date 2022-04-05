@@ -1,14 +1,14 @@
 Package: DescendMethods
-Type: Package
-Title: What the Package Does Using Title Case
-Version: 1.0
-Date: 2022-04-05
-Author: lucapresicce
-Maintainer: lucapresicce <l.presicce@campus.unimib.it>
-Description: More details about what the package does. See
-         <http://cran.r-project.org/doc/manuals/r-release/R-exts.html#The-DESCRIPTION-file>
-         for details on how to write this part.
-License: GPL (>= 2)
-Suggests: tinytest
-Imports: Rcpp (>= 1.0.6)
-LinkingTo: Rcpp, RcppEigen
+Title: Descend Methods for Linear Models
+Version: 0.0.0.9000
+Authors@R: c(
+    person("Luca", "Presicce", , "l.presicce@campus.unimib.it", role = c("cre", "aut")),
+    person("Alessandro", "Colombi", , "a.colombi10@campus.unimib.it", role = c("aut"))
+  )
+Description: A package that implements Gradient Descend Methods for Linear
+    Models
+License: LGPL (>= 3)
+URL: https://github.com/lucapresicce/DescendMethods
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.1
