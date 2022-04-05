@@ -9,6 +9,7 @@
 #'
 #' @return
 #' @export
+#' @import tictoc beepr
 #'
 #' @examples
 gd <- function(data,

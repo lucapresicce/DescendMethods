@@ -8,6 +8,7 @@
 #'
 #' @return
 #' @export
+#' @import tictoc beepr
 #'
 #' @examples
 sdg <- function(data,

@@ -3,3 +3,5 @@
 export(gd)
 export(hello)
 export(sdg)
+import(beepr)
+import(tictoc)
