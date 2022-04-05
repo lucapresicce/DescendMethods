@@ -7,21 +7,28 @@
 SteepD(data, init = NULL, tol = 1e-04, maxit = 1000L, verb = F, check_loss = F)
 }
 \arguments{
-\item{data}{}
+\item{data}{\link{list} containing the data, elements must be named \code{X} and \code{Y}.}
 
-\item{init}{}
+\item{init}{\link{vector} initial guesses of the parameter of interest. If \code{NULL}, values are all set equal to \code{1}.}
 
-\item{tol}{}
+\item{tol}{\link{numeric} it must be strictly positive. It is the tolerance on the error evaluation between subsequent iterations. It is use to determine the stopping criteria.}
 
-\item{maxit}{}
+\item{maxit}{\link{integer} it must be strictly positive. It is the maximum number of iterations.}
 
-\item{verb}{}
+\item{verb}{\link{boolean} if \code{TRUE}, it prints more information about the status of the algorithm.}
 
-\item{check_loss}{}
+\item{check_loss}{\link{boolean} if \code{TRUE}, the algorithm stops when
+\mjsdeqn{|| L(\beta(1) - L\beta(0))||\infty < tol}
+otherwise, it stops when \mjsdeqn{||\beta(1) - \beta(0))||_\infty < tol}.}
 }
 \value{
 
 }
 \description{
-Steepest Descend
+\loadmathjax Implements steepest descend method to find the coefficients \mjseqn{\beta} that minimize the following loss function
+\mjsdeqn{L(\beta) = (X\beta - y)^2}
+In this implementation, the stepsize is updated at each iteration employing the gradient
+\mjsdeqn{\nabla L(\beta) = 2X^{T}X\beta - 2X^{T}y}
+and the Hessian matrix
+\mjsdeqn{H L(\beta) = 4X^{T}X}
 }

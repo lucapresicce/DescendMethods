@@ -1,12 +1,18 @@
 #' Gradient Descend
 #'
-#' @param data 
-#' @param stepsize 
-#' @param init 
-#' @param tol 
-#' @param maxit 
-#' @param verb 
-#' @param check_loss 
+#' \loadmathjax Implements gradient descend method to find the coefficients \mjseqn{\beta} that minimize the following loss function
+#' \mjsdeqn{L(\beta) = (X\beta - y)^2}
+#' In this implementation, the stepsize is kept constant. To reach the minimum, it employs the gradient 
+#' \mjsdeqn{\nabla L(\beta) = 2X^{T}X\beta - 2X^{T}y}
+#' @param data [list] containing the data, elements must be named \code{X} and \code{Y}.
+#' @param stepsize [numeric] it must be strictly positive. It is the step size, also called learning parameter. The suggested value is \code{0.1*(1/nrow(data$X))} 
+#' @param init [vector] initial guesses of the parameter of interest. If \code{NULL}, values are all set equal to \code{1}. 
+#' @param tol [numeric] it must be strictly positive. It is the tolerance on the error evaluation between subsequent iterations. It is use to determine the stopping criteria.
+#' @param maxit [integer] it must be strictly positive. It is the maximum number of iterations.
+#' @param verb [boolean] if \code{TRUE}, it prints more information about the status of the algorithm. 
+#' @param check_loss [boolean] if \code{TRUE}, the algorithm stops when 
+#'  \mjsdeqn{|| L(\beta(1) - L\beta(0))||\infty < tol} 
+#' otherwise, it stops when \mjsdeqn{||\beta(1) - \beta(0))||_\infty < tol}.
 #'
 #' @return
 #' @export

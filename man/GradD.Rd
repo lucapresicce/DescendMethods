@@ -15,23 +15,28 @@ GradD(
 )
 }
 \arguments{
-\item{data}{}
+\item{data}{\link{list} containing the data, elements must be named \code{X} and \code{Y}.}
 
-\item{stepsize}{}
+\item{stepsize}{\link{numeric} it must be strictly positive. It is the step size, also called learning parameter. The suggested value is \code{0.1*(1/nrow(data$X))}}
 
-\item{init}{}
+\item{init}{\link{vector} initial guesses of the parameter of interest. If \code{NULL}, values are all set equal to \code{1}.}
 
-\item{tol}{}
+\item{tol}{\link{numeric} it must be strictly positive. It is the tolerance on the error evaluation between subsequent iterations. It is use to determine the stopping criteria.}
 
-\item{maxit}{}
+\item{maxit}{\link{integer} it must be strictly positive. It is the maximum number of iterations.}
 
-\item{verb}{}
+\item{verb}{\link{boolean} if \code{TRUE}, it prints more information about the status of the algorithm.}
 
-\item{check_loss}{}
+\item{check_loss}{\link{boolean} if \code{TRUE}, the algorithm stops when
+\mjsdeqn{|| L(\beta(1) - L\beta(0))||\infty < tol}
+otherwise, it stops when \mjsdeqn{||\beta(1) - \beta(0))||_\infty < tol}.}
 }
 \value{
 
 }
 \description{
-Gradient Descend
+\loadmathjax Implements gradient descend method to find the coefficients \mjseqn{\beta} that minimize the following loss function
+\mjsdeqn{L(\beta) = (X\beta - y)^2}
+In this implementation, the stepsize is kept constant. To reach the minimum, it employs the gradient
+\mjsdeqn{\nabla L(\beta) = 2X^{T}X\beta - 2X^{T}y}
 }
