@@ -20,4 +20,7 @@ Config/testthat/edition: 3
 Imports: 
     mathjaxr (>= 1.4-0),
     beepr,
-    tictoc
+    tictoc,
+    Rcpp
+LinkingTo: 
+    Rcpp

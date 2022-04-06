@@ -3,5 +3,8 @@
 export(GradD)
 export(SteepD)
 export(hello)
+export(try_rcpp)
 import(beepr)
 import(tictoc)
+importFrom(Rcpp,sourceCpp)
+useDynLib(DescendMethods, .registration = TRUE)
