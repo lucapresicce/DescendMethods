@@ -80,8 +80,10 @@ SteepD <- function(data,
     
     ## 6 - stop rule
     if(err < tol) {
-      if(verb) beepr::beep(1)
-      Sys.sleep(2)
+      if(verb){ 
+        beepr::beep(1)
+        Sys.sleep(2)
+        }
       break
     }
     
