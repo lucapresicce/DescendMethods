@@ -48,7 +48,7 @@ SteepD <- function(data,
   }
   
   beta_old <- as.matrix(init)
-  if(check_loss) loss_old <- t(X %*% beta_old - Y) %*% (X %*% beta_old - Y)
+  if(check_loss) loss_old <-  LossD(b = beta_old, X = X, Y = Y) # t(X %*% beta_old - Y) %*% (X %*% beta_old - Y)
   
   # compute hessian
   hes <- 4 * (t(X) %*% X)
@@ -62,7 +62,7 @@ SteepD <- function(data,
     ## 3 - update
     step <- sum(grad^2) / (t(grad) %*% hes %*% grad)
     beta_new <- beta_old - (as.double(step) * grad)
-    loss_new <- t(X %*% beta_new - Y) %*% (X %*% beta_new - Y)
+    loss_new <-  LossD(b = beta_new, X = X, Y = Y) # t(X %*% beta_new - Y) %*% (X %*% beta_new - Y)
     
     ## 4 - error computation
     if(!check_loss){
@@ -92,7 +92,7 @@ SteepD <- function(data,
   if (verb) {
     return(list(
       'Beta_hat' = beta_new,
-      'Minimum' = t(X %*% beta_new - Y) %*% (X %*% beta_new - Y),
+      'Minimum' =  LossD(b = beta_new, X = X, Y = Y), #t(X %*% beta_new - Y) %*% (X %*% beta_new - Y),
       'Final_error' = err,
       'Num_iter' = ifelse(iter < maxit, iter, paste('Reach the Maximum number of Iteration: ', maxit)),
       'Time' = (t$toc - t$tic)

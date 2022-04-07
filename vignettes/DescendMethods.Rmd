@@ -26,6 +26,26 @@ $$
 library(DescendMethods)
 ```
 
+## Question 1 - Implement a gradient descend function optimization
+
+In order to answer this question, we have implemented the function called `GradD()`. This take as input the following argument (that are full explained in the function documentation, callable with `?GradD`) :
+```{r, eval=FALSE}
+GradD(data,
+      stepsize = 1e-04,
+      init = NULL,
+      tol = 1e-04,
+      maxit = 1000L,
+      verb = F,
+      check_loss = F)
+```
+
+and return a list of element composed by: 
+  : `Beta_hat` that contains the $\beta$ coefficient of interest
+  : `Minimum` return the value of the loss function at the convergence point (only     if `verb = TRUE`)
+  : `Final_error` return the value of the error at the convergence point
+  : `Num_iter` return the number of iterations that the function used to reach the     minimum
+  : `Time` it is the time elapsed to perform the optimization (increased by 2         seconds to make it traceable even with small data)
+
 ## Examples 
 
 Below are some code chunks as examples, in which the functions are implemented.
