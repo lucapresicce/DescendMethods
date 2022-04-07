@@ -46,6 +46,41 @@ and return a list of element composed by:
   : `Num_iter` return the number of iterations that the function used to reach the     minimum
   : `Time` it is the time elapsed to perform the optimization (increased by 2         seconds to make it traceable even with small data)
 
+We want to notice that, since the stopping criteria consider only the absolute variation on the $\beta$ coefficient and we think that it can be misleading in certain cases, we have introduced a boolean flag called `check_loss = T`. This option, if `TRUE`, allow to evaluate the absolute difference from the loss function, instead on the parameters.
+
+## Question 2 - Steepest descend method
+
+In order to answer this question, we have implemented the function called `SteepD()`. This take as input the following argument (that are full explained in the function documentation, callable with `?SteepD`) :
+```{r, eval=FALSE}
+SteepD(data,
+       init = NULL,
+       tol = 1e-04,
+       maxit = 1000L,
+       verb = F,
+       check_loss = F)
+```
+
+and return a list of element composed by: 
+  : `Beta_hat` that contains the $\beta$ coefficient of interest
+  : `Minimum` return the value of the loss function at the convergence point (only     if `verb = TRUE`)
+  : `Final_error` return the value of the error at the convergence point
+  : `Num_iter` return the number of iterations that the function used to reach the     minimum
+  : `Time` it is the time elapsed to perform the optimization (increased by 2         seconds to make it traceable even with small data)
+
+We want to notice that, since the stopping criteria consider only the absolute variation on the $\beta$ coefficient and we think that it can be misleading in certain cases, we have introduced a boolean flag called `check_loss = T`. This option, if `TRUE`, allow to evaluate the absolute difference from the loss function, instead on the parameters.
+
+
+## Question 3 - Considerations
+
+```{r}
+# g <- GradD()
+# s <- SteepD()
+```
+
+
+## Question 4 - Parallel cross-validation
+
+
 ## Examples 
 
 Below are some code chunks as examples, in which the functions are implemented.
@@ -105,12 +140,7 @@ real data
 x <- as.matrix(trees$Height)
 y <- trees$Girth
 df <- list(X = x, Y = y)
-loss <- function(b, data = df) {
-  X <- df$X
-  Y <- df$Y
-  t(X %*% b - Y) %*% (X %*% b - Y)
-}
-opt <- optim(par = rep(1, 1), fn = loss, data = df, method = c("BFGS"))
+opt <- optim(par = rep(1, 1), fn = LossD, X = x, Y = y, method = c("BFGS"))
 res <- GradD(data = df, stepsize = 1e-6, check_loss = T, maxit = 30000, verb = F)
 opt$par
 res$Beta_hat
@@ -120,12 +150,7 @@ res$Beta_hat
 x <- as.matrix(trees$Height)
 y <- trees$Girth
 df <- list(X = x, Y = y)
-loss <- function(b, data = df) {
-  X <- df$X
-  Y <- df$Y
-  t(X %*% b - Y) %*% (X %*% b - Y)
-}
-opt <- optim(par = rep(1, 1), fn = loss, data = df, method = c("BFGS"))
+opt <- optim(par = rep(1, 1), fn = LossD, X = x, Y = y, method = c("BFGS"))
 res <- SteepD(data = df, check_loss = T, maxit = 30000, verb = T)
 opt$par
 res$Beta_hat
@@ -138,13 +163,7 @@ real data - multiple
 x <- as.matrix(trees[, -1])
 y <- trees$Girth
 df <- list(X = x, Y = y)
-loss <- function(b, data = df) {
-  X <- df$X
-  Y <- df$Y
-  t(X %*% b - Y) %*% (X %*% b - Y)
-}
-opt <- optim(par = rep(1, 2), fn = loss, data = df, method = c("BFGS"))
-res <- GradD(data = df, check_loss = T,stepsize = 1e-8, maxit = 30000, verb = F)
+opt <- optim(par = rep(1, 2), fn = LossD, X = x, Y = y, method = c("BFGS"))opt <- res <- GradD(data = df, check_loss = T,stepsize = 1e-8, maxit = 30000, verb = F)
 opt$par
 res$Beta_hat
 ```
@@ -153,12 +172,7 @@ res$Beta_hat
 x <- as.matrix(trees[, -1])
 y <- trees$Girth
 df <- list(X = x, Y = y)
-loss <- function(b, data = df) {
-  X <- df$X
-  Y <- df$Y
-  t(X %*% b - Y) %*% (X %*% b - Y)
-}
-opt <- optim(par = rep(1, 2), fn = loss, data = df, method = c("BFGS"))
+opt <- optim(par = rep(1, 2), fn = LossD, X = x, Y = y, method = c("BFGS"))
 res <- SteepD(data = df, check_loss = T, verb = F)
 opt$par
 res$Beta_hat
