@@ -1,0 +1,94 @@
+---
+title: "R4DS Exam - Part 1"
+author: "Luca Presicce, Alessandro Colombi"
+date: "7/4/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+## Dataset 
+
+Use the `COVID19` dataset and work on the number of `deaths`.
+
+- Instructions about how to get the data: https://covid19datahub.io/articles/api/r.html
+- Dataset description: https://covid19datahub.io/articles/doc/data.html
+
+```{r}
+setwd(dirname(rstudioapi::getActiveDocumentContext()$path)) 
+# install.packages("COVID19")
+suppressWarnings(suppressPackageStartupMessages(library(tidyverse)))
+suppressWarnings(suppressPackageStartupMessages(library(COVID19)))
+
+x <- covid19(level = 1,  verbose = FALSE)
+```
+
+
+## Request
+
+The goal is the exercise request as well as the readability and the robustness of your code. Therefore try to elaborate a code resilient to the increase of the number of countries as well as the increase of the amount of time, for example. 
+
+### Exercise 1
+
+Create a table to present the number of total `deaths` by country, sorted by the cumulative number of `deaths` in decreasing order.
+
+Proposed solution:
+```{r}
+x %>% 
+  filter(!is.na(iso_alpha_3)) %>% 
+  select(deaths, Country = iso_alpha_3) %>% 
+  group_by(Country) %>% 
+  summarise(`Total deaths` = ifelse(all(is.na(deaths)),
+                                  NA,
+                                  sum(deaths, rm.na = T))) %>%  
+  arrange(desc(`Total deaths`))
+```
+
+### Exercises 2.
+
+Using the `COVID19` dataset, work on the number of `deaths`.
+
+Aggregate data by month and use only 2020 data.
+
+Compare the country different situations. Therefore organize the table as shown in the example below: with one row for each country (`country` the primary key of the table), sort the lines by the total deaths (i.e. `Total Deaths`) like in previous table, and show this quantity split on the time interval you chose. Therefore one more column for each period (i.e. one more column for each month) in chronological order from left to right (i.e. therefore column names will be `2020-01`, `2020-02`, `2020-03`, ...). 
+
+Example of result:
+
+```{r}
+tibble(
+  country = "ITA",
+  `Total Deaths` = 4,
+  `2020-01` = 0, 
+  `2020-02` = 1, 
+  `2020-03` = 3
+)
+```
+
+Proposed solution:
+```{r}
+suppressWarnings(suppressPackageStartupMessages(library(lubridate)))
+
+x %>%
+  filter(!is.na(iso_alpha_3)) %>%
+  select(deaths, Country = iso_alpha_3, date) %>%
+  filter(year(date) == 2020 )   %>%
+  mutate(date_ym = format(
+    floor_date(date, unit = "month"),
+    format = "%Y-%m")) %>%
+  group_by(Country, date_ym) %>%
+  summarise(death_per_month = ifelse(all(is.na(deaths)),
+                                     NA,
+                                     sum(deaths, rm.na = T))) %>% 
+  ungroup() %>%
+  pivot_wider(names_from = date_ym, values_from = death_per_month) %>% 
+  rowwise() %>% 
+  mutate(`Total deaths` = ifelse(all(is.na(c_across(where(is.numeric)))),
+                                     NA,
+                                     sum(c_across(where(is.numeric)), na.rm = T))) %>% 
+  relocate(`Total deaths`, .after = Country)
+
+```
+
