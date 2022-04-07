@@ -25,5 +25,6 @@ Imports:
     tictoc,
     Rcpp
 LinkingTo: 
-    Rcpp
+    Rcpp,
+    RcppArmadillo
 VignetteBuilder: knitr
