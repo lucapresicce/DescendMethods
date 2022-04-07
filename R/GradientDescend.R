@@ -18,7 +18,6 @@
 #' @export
 #' @import tictoc beepr
 #'
-#' @examples
 GradD <- function(data,
                stepsize = 1e-4, # suggested : 0.1*(1/nrow(X))
                init = NULL,

@@ -2,6 +2,8 @@
 
 export(GradD)
 export(LossD)
+export(MseD)
+export(PredictD)
 export(SteepD)
 export(hello)
 export(try_rcpp)

@@ -12,7 +12,6 @@
 #' @export
 #' @import tictoc beepr
 #'
-#' @examples
 SteepD <- function(data,
                init = NULL,
                tol = 1e-4,
