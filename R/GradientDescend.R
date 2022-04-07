@@ -1,9 +1,9 @@
 #' Gradient Descend
 #'
 #' \loadmathjax Implements gradient descend method to find the coefficients \mjseqn{\beta} that minimize the following loss function
-#' \mjsdeqn{L(\beta) = (X\beta - y)^2}
+#' \mjsdeqn{L(\beta) = (X\beta - Y)^2}
 #' In this implementation, the stepsize is kept constant. To reach the minimum, it employs the gradient 
-#' \mjsdeqn{\nabla L(\beta) = 2X^{T}X\beta - 2X^{T}y}
+#' \mjsdeqn{\nabla L(\beta) = 2X^{T}X\beta - 2X^{T}Y}
 #' @param data [list] containing the data, elements must be named \code{X} and \code{Y}.
 #' @param stepsize [numeric] it must be strictly positive. It is the step size, also called learning parameter. The suggested value is \code{0.1*(1/nrow(data$X))} 
 #' @param init [vector] initial guesses of the parameter of interest. If \code{NULL}, values are all set equal to \code{1}. 

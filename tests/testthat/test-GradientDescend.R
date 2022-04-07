@@ -20,22 +20,52 @@ test_that("simulated data - loss evaluation", {
   expect_equal(as.numeric(res$Beta_hat), beta, tolerance = 1)
 })
 
-test_that("real data", {
+
+# No check loss
+
+test_that("real data - simple linear regression", {
   # simple lm
-  fit = lm(Girth ~ Volume, data = trees)
-  x <- model.matrix.lm(fit)
-  y = trees$Girth
+  x <- as.matrix(trees$Height)
+  y <- trees$Girth
   df <- list(X = x, Y = y)
-  res <- GradD(data = df, stepsize = 1e-5, check_loss = T, maxit = 30000, verb = T)
-  expect_equal(as.numeric(res$Beta_hat), as.numeric(coef(fit)), tolerance = 1)
+  opt <- optim(par = rep(1, 1), fn = LossD, X = x, Y = y, method = c("BFGS"))
+  res <- GradD(data = df, stepsize = 1e-6, check_loss = F, verb = F)
+  expect_equal(as.numeric(res$Beta_hat), as.numeric(opt$par), tolerance = 1)
 })
 
-test_that("real data - multiple", {
-  # simple lm
-  fit = lm(Girth ~ ., data = trees)
-  x <- model.matrix.lm(fit)
-  y = trees$Girth
+
+
+test_that("real data - multiple linear regression", {
+  # multiple lm
+  x <- as.matrix(trees[, -1])
+  y <- trees$Girth
   df <- list(X = x, Y = y)
-  res <- GradD(data = df, check_loss = T,stepsize = 1e-8, maxit = 30000, verb = T)
-  expect_equal(as.numeric(res$Beta_hat), as.numeric(coef(fit)), tolerance = 1)
+  opt <- optim(par = rep(1, 2), fn = LossD, X = x, Y = y, method = c("BFGS"))
+  res <- GradD(data = df, stepsize = 1e-6, check_loss = F, verb = F)
+  expect_equal(as.numeric(res$Beta_hat), as.numeric(opt$par), tolerance = 1)
+})
+
+
+# With check loss
+
+test_that("real data - simple linear regression - L", {
+  # simple lm
+  x <- as.matrix(trees$Height)
+  y <- trees$Girth
+  df <- list(X = x, Y = y)
+  opt <- optim(par = rep(1, 1), fn = LossD, X = x, Y = y, method = c("BFGS"))
+  res <- GradD(data = df, stepsize = 1e-6, check_loss = T, verb = F)
+  expect_equal(as.numeric(res$Beta_hat), as.numeric(opt$par), tolerance = 1)
+})
+
+
+
+test_that("real data - multiple linear regression - L", {
+  # multiple lm
+  x <- as.matrix(trees[, -1])
+  y <- trees$Girth
+  df <- list(X = x, Y = y)
+  opt <- optim(par = rep(1, 2), fn = LossD, X = x, Y = y, method = c("BFGS"))
+  res <- GradD(data = df, stepsize = 1e-6, check_loss = T, verb = F)
+  expect_equal(as.numeric(res$Beta_hat), as.numeric(opt$par), tolerance = 1)
 })
