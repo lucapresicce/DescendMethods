@@ -72,6 +72,7 @@ We want to notice that, since the stopping criteria consider only the absolute v
 
 ## Question 3 - Considerations
 
+In order to answer this question, we need to make an example. We have choose to 
 ```{r}
 # g <- GradD()
 # s <- SteepD()
@@ -163,7 +164,8 @@ real data - multiple
 x <- as.matrix(trees[, -1])
 y <- trees$Girth
 df <- list(X = x, Y = y)
-opt <- optim(par = rep(1, 2), fn = LossD, X = x, Y = y, method = c("BFGS"))opt <- res <- GradD(data = df, check_loss = T,stepsize = 1e-8, maxit = 30000, verb = F)
+opt <- optim(par = rep(1, 2), fn = LossD, X = x, Y = y, method = c("BFGS"))
+res <- GradD(data = df, check_loss = T,stepsize = 1e-8, maxit = 30000, verb = F)
 opt$par
 res$Beta_hat
 ```
