@@ -7,17 +7,22 @@
 CrossVD(data, K = NULL, get_mean = T, OPT, ...)
 }
 \arguments{
-\item{data}{}
+\item{data}{\link{list} containing the data, elements must be named \code{X} and \code{Y}.}
 
-\item{K}{}
+\item{K}{\link{integer} the number of folds. Set equal to \code{NULL} to run a Leave-one-out cross validation.
+If \code{K} is larger than the number of observations, the Leave-one-out cross validation is run by default.}
 
-\item{...}{}
+\item{get_mean}{\link{boolean} if \code{TRUE}, the CV-MSE is returned, otherwise the function returns the MSE computed for each fold.}
 
-\item{FUN}{}
+\item{OPT}{\link{function} the optimization function whose prediction power has to be tested. If can only be equal to
+\code{\link{GradD}} or \code{\link{SteepD}}.}
+
+\item{...}{optional arguments to OPT}
 }
 \value{
-
+if \code{get_mean} is \code{TRUE}, the CV-MSE is returned.
+Otherwise the function returns a \link{vector} containing all MSE computed for each fold.
 }
 \description{
-CrossVD
+This function calculates the estimated K-fold or Leave-one-out cross-validation mean squared prediction error.
 }

@@ -7,19 +7,14 @@
 PcrossVD(data, K = NULL, get_mean = T, n_clust = NULL, OPT, ...)
 }
 \arguments{
-\item{data}{}
+\item{data}{\link{list} containing the data, elements must be named \code{X} and \code{Y}.}
 
-\item{K}{}
-
-\item{get_mean}{}
-
-\item{OPT}{}
-
-\item{...}{}
+\item{n_clust}{\link{integer} the number of clusters to use. If \code{NULL}, the function selects all available cores but one.}
 }
 \value{
-
+if \code{get_mean} is \code{TRUE}, the CV-MSE is returned.
+Otherwise the function returns a \link{vector} containing all MSE computed for each fold.
 }
 \description{
-PcrossVD
+This function is the parallel version of \code{\link{CrossVD}}.
 }

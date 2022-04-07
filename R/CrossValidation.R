@@ -1,16 +1,19 @@
 #' CrossVD
 #'
-#' @param data 
-#' @param K 
-#' @param FUN 
-#' @param ... 
-#'
-#' @return
+#' This function calculates the estimated K-fold or Leave-one-out cross-validation mean squared prediction error.
+#' @param K [integer] the number of folds. Set equal to \code{NULL} to run a Leave-one-out cross validation.
+#' If \code{K} is larger than the number of observations, the Leave-one-out cross validation is run by default.
+#' @param get_mean [boolean] if \code{TRUE}, the CV-MSE is returned, otherwise the function returns the MSE computed for each fold.
+#' @param OPT [function] the optimization function whose prediction power has to be tested. If can only be equal to 
+#' \code{\link{GradD}} or \code{\link{SteepD}}.
+#' @param ... optional arguments to OPT
+#' @inheritParams GradD
+#' 
+#' @return if \code{get_mean} is \code{TRUE}, the CV-MSE is returned.
+#' Otherwise the function returns a [vector] containing all MSE computed for each fold.
 #' @export
-#'
-#' @examples
 CrossVD = function(data, 
-                   K = NULL, # se K null, fa loocv
+                   K = NULL, 
                    get_mean = T,
                    OPT, ...){
   
@@ -74,17 +77,13 @@ CrossVD = function(data,
 
 #' PcrossVD
 #'
-#' @param data 
-#' @param K 
-#' @param get_mean 
-#' @param OPT 
-#' @param ... 
+#' This function is the parallel version of \code{\link{CrossVD}}.
+#' @param n_clust [integer] the number of clusters to use. If \code{NULL}, the function selects all available cores but one.
+#' @inheritParams GradD
 #'
-#' @return
+#' @inherit CrossVD return
 #' @export
 #' @import doSNOW parallel
-#'
-#' @examples
 PcrossVD = function(data, 
                    K = NULL, # se K null, fa loocv
                    get_mean = T,

@@ -39,7 +39,7 @@ GradD(data,
       check_loss = F)
 ```
 
-and return a list of element composed by: 
+and returns a list of element composed by: 
   : `Beta_hat` that contains the $\beta$ coefficient of interest
   : `Minimum` return the value of the loss function at the convergence point (only     if `verb = TRUE`)
   : `Final_error` return the value of the error at the convergence point
@@ -80,7 +80,19 @@ In order to answer this question, we need to make an example. We have choose to
 
 
 ## Question 4 - Parallel cross-validation
-
+The package also provides the cross validation functions `CrossVD()` and `PcrossVD()`. 
+The call for the sequential version is the following one,
+```{r, eval=FALSE}
+CrossVD(data, 
+        K = NULL, 
+        get_mean = T,
+        OPT, ...)
+```
+as usual, parameters' are all explained in the function documentation. We here just report that the idea is to 
+build a function that takes the name of the optimization function to be used as an argument. At the moment, 
+`OPT` accepts only `GradD` and `SteepD`. 
+If `get_mean` is `TRUE`, the CV-MSE is returned.
+Otherwise the function returns a vector containing all MSE computed for each fold.
 
 ## Examples 
 

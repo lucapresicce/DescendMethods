@@ -32,7 +32,12 @@ GradD(
 otherwise, it stops when \mjsdeqn{||\beta(1) - \beta(0))||_\infty < tol}.}
 }
 \value{
-
+\link{list} composed by
+: \code{Beta_hat} the \mjseqn{\beta} coefficient of interest
+: \code{Minimum}  the value of the loss function at the convergence point (only     if \code{verb = TRUE})
+: \code{Final_error} the value of the error at the convergence point
+: \code{Num_iter} the number of iterations that the function used to reach the     minimum
+: \code{Time} it is the time elapsed to perform the optimization (increased by 2         seconds to make it traceable even with small data)
 }
 \description{
 \loadmathjax Implements gradient descend method to find the coefficients \mjseqn{\beta} that minimize the following loss function

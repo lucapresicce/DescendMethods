@@ -7,8 +7,7 @@
 #' and the Hessian matrix 
 #' \mjsdeqn{H L(\beta) = 4X^{T}X}
 #' @inheritParams GradD
-#'
-#' @return
+#' @inherit GradD return 
 #' @export
 #' @import tictoc beepr
 #'

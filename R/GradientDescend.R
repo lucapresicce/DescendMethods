@@ -14,7 +14,12 @@
 #'  \mjsdeqn{|| L(\beta(1) - L\beta(0))||\infty < tol} 
 #' otherwise, it stops when \mjsdeqn{||\beta(1) - \beta(0))||_\infty < tol}.
 #'
-#' @return
+#' @return [list] composed by 
+#': `Beta_hat` the \mjseqn{\beta} coefficient of interest
+#': `Minimum`  the value of the loss function at the convergence point (only     if `verb = TRUE`)
+#': `Final_error` the value of the error at the convergence point
+#': `Num_iter` the number of iterations that the function used to reach the     minimum
+#': `Time` it is the time elapsed to perform the optimization (increased by 2         seconds to make it traceable even with small data)
 #' @export
 #' @import tictoc beepr
 #'
