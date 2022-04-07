@@ -1,0 +1,36 @@
+---
+title: "DescendMethods"
+author: "Luca Presicce, Alessandro Colombi"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{DescendMethods}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## Contents of the package
+
+In this package are included two principal functions: `GradD()` and `SteepD()`. These perform the algorithm of optimization called Gradient Descend and Steepest Descend, respectively. These functions are especially build to perform an optimization in order to find $\beta$ parameters of a liner model, i.e. 
+$$
+Y=X\beta + \varepsilon
+$$
+
+```{r setup}
+library(DescendMethods)
+```
+
+## Examples 
+
+Below are some code chunks as examples.
+
+```{r}
+
+```
+
