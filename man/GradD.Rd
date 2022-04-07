@@ -36,7 +36,7 @@ otherwise, it stops when \mjsdeqn{||\beta(1) - \beta(0))||_\infty < tol}.}
 }
 \description{
 \loadmathjax Implements gradient descend method to find the coefficients \mjseqn{\beta} that minimize the following loss function
-\mjsdeqn{L(\beta) = (X\beta - y)^2}
+\mjsdeqn{L(\beta) = (X\beta - Y)^2}
 In this implementation, the stepsize is kept constant. To reach the minimum, it employs the gradient
-\mjsdeqn{\nabla L(\beta) = 2X^{T}X\beta - 2X^{T}y}
+\mjsdeqn{\nabla L(\beta) = 2X^{T}X\beta - 2X^{T}Y}
 }

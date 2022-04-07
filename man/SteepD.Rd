@@ -26,9 +26,9 @@ otherwise, it stops when \mjsdeqn{||\beta(1) - \beta(0))||_\infty < tol}.}
 }
 \description{
 \loadmathjax Implements steepest descend method to find the coefficients \mjseqn{\beta} that minimize the following loss function
-\mjsdeqn{L(\beta) = (X\beta - y)^2}
+\mjsdeqn{L(\beta) = (X\beta - Y)^2}
 In this implementation, the stepsize is updated at each iteration employing the gradient
-\mjsdeqn{\nabla L(\beta) = 2X^{T}X\beta - 2X^{T}y}
+\mjsdeqn{\nabla L(\beta) = 2X^{T}X\beta - 2X^{T}Y}
 and the Hessian matrix
 \mjsdeqn{H L(\beta) = 4X^{T}X}
 }

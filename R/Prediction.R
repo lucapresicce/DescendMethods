@@ -51,7 +51,7 @@ MseD = function(coef, data){
   ypred = PredictD(coef, as.data.frame(data$X))
   
   # return MSE
-  return( sum((data$Y - ypred)^2) )
+  return( mean((data$Y - ypred)^2) )
   
   
 }
