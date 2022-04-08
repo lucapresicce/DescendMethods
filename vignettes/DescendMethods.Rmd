@@ -41,10 +41,10 @@ GradD(data,
 
 and returns a list of element composed by: 
   : `Beta_hat` that contains the $\beta$ coefficient of interest
-  : `Minimum` return the value of the loss function at the convergence point (only     if `verb = TRUE`)
+  : `Minimum` return the value of the loss function at the convergence point (only if `verb = TRUE`)
   : `Final_error` return the value of the error at the convergence point
-  : `Num_iter` return the number of iterations that the function used to reach the     minimum
-  : `Time` it is the time elapsed to perform the optimization (increased by 2         seconds to make it traceable even with small data)
+  : `Num_iter` return the number of iterations that the function used to reach the minimum
+  : `Time` it is the time elapsed to perform the optimization (increased by 2 seconds to make it traceable even with small data)
 
 We want to notice that, since the stopping criteria consider only the absolute variation on the $\beta$ coefficient and we think that it can be misleading in certain cases, we have introduced a boolean flag called `check_loss = T`. This option, if `TRUE`, allow to evaluate the absolute difference from the loss function, instead on the parameters.
 
@@ -62,10 +62,10 @@ SteepD(data,
 
 and return a list of element composed by: 
   : `Beta_hat` that contains the $\beta$ coefficient of interest
-  : `Minimum` return the value of the loss function at the convergence point (only     if `verb = TRUE`)
+  : `Minimum` return the value of the loss function at the convergence point (only if `verb = TRUE`)
   : `Final_error` return the value of the error at the convergence point
-  : `Num_iter` return the number of iterations that the function used to reach the     minimum
-  : `Time` it is the time elapsed to perform the optimization (increased by 2         seconds to make it traceable even with small data)
+  : `Num_iter` return the number of iterations that the function used to reach the minimum
+  : `Time` it is the time elapsed to perform the optimization (increased by 2 seconds to make it traceable even with small data)
 
 We want to notice that, since the stopping criteria consider only the absolute variation on the $\beta$ coefficient and we think that it can be misleading in certain cases, we have introduced a boolean flag called `check_loss = T`. This option, if `TRUE`, allow to evaluate the absolute difference from the loss function, instead on the parameters.
 
@@ -80,19 +80,28 @@ In order to answer this question, we need to make an example. We have choose to
 
 
 ## Question 4 - Parallel cross-validation
-The package also provides the cross validation functions `CrossVD()` and `PcrossVD()`. 
-The call for the sequential version is the following one,
+The package also provides two functions that perform a cross validation on predictive capability for a linear model, achieved by a set of parameters obtained throught an optimization process. They are `CrossVD()` and `PcrossVD()`, and they were written following two different flow of operation: sequential and parallel respectively. 
+
+The call for the sequential version is the following one:
 ```{r, eval=FALSE}
 CrossVD(data, 
         K = NULL, 
         get_mean = T,
         OPT, ...)
 ```
-as usual, parameters' are all explained in the function documentation. We here just report that the idea is to 
-build a function that takes the name of the optimization function to be used as an argument. At the moment, 
-`OPT` accepts only `GradD` and `SteepD`. 
-If `get_mean` is `TRUE`, the CV-MSE is returned.
-Otherwise the function returns a vector containing all MSE computed for each fold.
+As usual, all the arguments are all explained in the function documentation. We here just report that the idea is to build a function that takes the name of the optimization function to be used as an argument. At the moment, `OPT` accepts only `GradD` and `SteepD`. 
+Moreover, if `get_mean` is `TRUE`, the CV-MSE is returned. Otherwise the function returns a vector containing all MSE computed for each fold.
+
+The call for the parallel version is the following one:
+```{r, eval=FALSE}
+PcrossVD(data, 
+        K = NULL, 
+        get_mean = T,
+        n_clust = NULL,
+        OPT, ...)
+```
+As usual, all the arguments are all explained in the function documentation. We here just report that the idea is to build a function that takes the name of the optimization function to be used as an argument. At the moment, `OPT` accepts only `GradD` and `SteepD`. 
+Moreover, if `get_mean` is `TRUE`, the CV-MSE is returned. Otherwise the function returns a vector containing all MSE computed for each fold.
 
 ## Examples 
 
