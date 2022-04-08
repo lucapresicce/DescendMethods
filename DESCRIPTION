@@ -23,7 +23,8 @@ Imports:
     mathjaxr (>= 1.4-0),
     beepr,
     tictoc,
-    Rcpp
+    Rcpp,
+    doSNOW
 LinkingTo: 
     Rcpp,
     RcppArmadillo
