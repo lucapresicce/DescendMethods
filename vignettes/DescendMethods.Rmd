@@ -100,8 +100,20 @@ PcrossVD(data,
         n_clust = NULL,
         OPT, ...)
 ```
-As usual, all the arguments are all explained in the function documentation. We here just report that the idea is to build a function that takes the name of the optimization function to be used as an argument. At the moment, `OPT` accepts only `GradD` and `SteepD`. 
-Moreover, if `get_mean` is `TRUE`, the CV-MSE is returned. Otherwise the function returns a vector containing all MSE computed for each fold.
+The only difference with respect to the previous one is the additional argument to get the number of cores/clusters the user want to use.
+In both functions, we rely on the map-reduce paradigm. In the parallel version, only the map transformation has been parallelized. We encounterd a problem for the parallel version,
+indeed we always get an error message
+**Aggiungere errore**
+
+Apparently, the problem has been solved by calling the OPT function at least once before the parallelization. Namely, 
+```{r, eval=FALSE}
+OPT(df, maxit=1)
+## 1 - define the cluster
+cluster <- makeCluster(n_clust, type = "SOCK")
+registerDoSNOW(cluster)
+```
+We are aware that this is not an elegant solution and it would be nice to understand what is happening to solve the problem.
+
 
 ## Examples 
 

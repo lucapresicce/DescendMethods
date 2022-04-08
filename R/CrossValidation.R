@@ -103,7 +103,7 @@ PcrossVD = function(data,
   n = nrow(X)
   p = ncol(X)
   
-  ### ? trucco alla Raf' ? ###
+  ### ? trucco, se lo togli non funziona ? ###
   OPT(df, maxit=1)
   
   ## 1 - define the cluster
