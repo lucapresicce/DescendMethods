@@ -7,13 +7,16 @@
 PredictD(coef, newdata)
 }
 \arguments{
-\item{newdata}{}
+\item{coef}{\link{vector} containing the estimated coefficients \mjseqn{\hat{beta}}.}
 
-\item{model}{}
+\item{newdata}{\link{data.frame} whose number of rows represents the number of new data to be predicted and the
+number of columns must be equal to the length of \code{coef}. None check is done on the order of the
+variables. Hence, the user is supposed to use the same ordering of the variables that is given
+\code{coef}.}
 }
 \value{
-
+the predicted values
 }
 \description{
-PredictD
+\loadmathjax Compute pointwise prediction in linear model
 }

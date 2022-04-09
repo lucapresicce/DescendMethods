@@ -7,7 +7,9 @@
 CrossVD(data, K = NULL, get_mean = T, OPT, ...)
 }
 \arguments{
-\item{data}{\link{list} containing the data, elements must be named \code{X} and \code{Y}.}
+\item{data}{\link{list} containing the data, elements must be named \code{X} and \code{Y}, where \code{X} is a
+\code{n x k} matrix and \code{Y} is a vector of length \code{n}. Here, \code{n} represents the number of
+observations and \code{k} is the number of  \mjseqn{\beta} coefficients.}
 
 \item{K}{\link{integer} the number of folds. Set equal to \code{NULL} to run a Leave-one-out cross validation.
 If \code{K} is larger than the number of observations, the Leave-one-out cross validation is run by default.}

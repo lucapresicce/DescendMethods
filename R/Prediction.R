@@ -1,9 +1,13 @@
 #' PredictD
 #'
-#' @param model 
-#' @param newdata 
+#' \loadmathjax Compute pointwise prediction in linear model
+#' @param coef [vector] containing the estimated coefficients \mjseqn{\hat{beta}}.
+#' @param newdata [data.frame] whose number of rows represents the number of new data to be predicted and the 
+#' number of columns must be equal to the length of \code{coef}. None check is done on the order of the
+#' variables. Hence, the user is supposed to use the same ordering of the variables that is given
+#' \code{coef}.
 #'
-#' @return
+#' @return the predicted values
 #' @export
 PredictD = function(coef, newdata){
    
@@ -30,10 +34,10 @@ PredictD = function(coef, newdata){
 
 #' MseD
 #'
-#' @param model 
-#' @param data 
-#'
-#' @return
+#' \loadmathjax Compute Mean Square Prediction error for a linear model.
+#' @inheritParams PredictD 
+#' @inheritParams GradD 
+#' @return the Mean Square Prediction error.
 #' @export
 MseD = function(coef, data){
   

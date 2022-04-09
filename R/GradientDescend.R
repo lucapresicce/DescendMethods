@@ -11,8 +11,8 @@
 #' @param init [vector] initial guesses of the parameter of interest. If \code{NULL}, values are all set equal to \code{1}. 
 #' @param tol [numeric] it must be strictly positive. It is the tolerance on the error evaluation between subsequent iterations. It is use to determine the stopping criteria.
 #' @param maxit [integer] it must be strictly positive. It is the maximum number of iterations.
-#' @param verb [boolean] if \code{TRUE}, it prints more information about the status of the algorithm. 
-#' @param check_loss [boolean] if \code{TRUE}, the algorithm stops when 
+#' @param verb [bool] if \code{TRUE}, it prints more information about the status of the algorithm. 
+#' @param check_loss [bool] if \code{TRUE}, the algorithm stops when 
 #'  \mjsdeqn{|| L(\beta(1) - L\beta(0))||\infty < tol} 
 #' otherwise, it stops when \mjsdeqn{||\beta(1) - \beta(0))||_\infty < tol}.
 #'

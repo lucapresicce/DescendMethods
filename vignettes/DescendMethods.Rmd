@@ -254,6 +254,16 @@ microbenchmark(
   GradD(data = df)
 )
 ```
+# Prediction 
+The package also provides specific functions for prediction in linear models. 
+`PredictD` gets as input the estimated coefficients and the new covariates and returns the 
+pointwise estimation. To emulate the usage of the well know `stats::predict` function, the new
+data to be predicted must be a data.frame. However, none check is done on the order of the
+variables. Hence, the user is supposed to use the same ordering of the variables that is given
+by the vector of the estimated coefficients.
+`MseD` gets the estimated coefficients and the data and it return the
+Mean Squared error.
+
 
 # Cross Validation
 Usage example for leave-one-out cross validation.
@@ -282,7 +292,7 @@ Usage example for K-fold cross validation.
 
 ```{r}
 set.seed(445)
-n = 1000
+n = 10000
 x1 = runif(n)
 x2 = rnorm(n)
 x3 = rnorm(n)
@@ -292,11 +302,11 @@ x <- cbind(1, x1, x2, x3, x4)
 df <- list(X = x, Y = y)
 
 tictoc::tic()
-CrossVD(data = df, K = 5, OPT = SteepD)
+CrossVD(data = df, K = 10, OPT = SteepD)
 tictoc::toc()
 
 tictoc::tic()
-PcrossVD(data = df, K = 5, OPT = SteepD)
+PcrossVD(data = df, K = 10, OPT = SteepD)
 tictoc::toc()
 ```
 The K-fold cross validation is less computational expensive than the leave-one-out counter part. Therefore the fixed costs of the parallelization exceeds its gain. However, if we increase the dimensionality of the problem, the advantages are clear.

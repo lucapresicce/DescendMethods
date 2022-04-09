@@ -7,7 +7,9 @@
 SteepD(data, init = NULL, tol = 1e-04, maxit = 1000L, verb = F, check_loss = F)
 }
 \arguments{
-\item{data}{\link{list} containing the data, elements must be named \code{X} and \code{Y}.}
+\item{data}{\link{list} containing the data, elements must be named \code{X} and \code{Y}, where \code{X} is a
+\code{n x k} matrix and \code{Y} is a vector of length \code{n}. Here, \code{n} represents the number of
+observations and \code{k} is the number of  \mjseqn{\beta} coefficients.}
 
 \item{init}{\link{vector} initial guesses of the parameter of interest. If \code{NULL}, values are all set equal to \code{1}.}
 
@@ -15,9 +17,9 @@ SteepD(data, init = NULL, tol = 1e-04, maxit = 1000L, verb = F, check_loss = F)
 
 \item{maxit}{\link{integer} it must be strictly positive. It is the maximum number of iterations.}
 
-\item{verb}{\link{boolean} if \code{TRUE}, it prints more information about the status of the algorithm.}
+\item{verb}{\link{bool} if \code{TRUE}, it prints more information about the status of the algorithm.}
 
-\item{check_loss}{\link{boolean} if \code{TRUE}, the algorithm stops when
+\item{check_loss}{\link{bool} if \code{TRUE}, the algorithm stops when
 \mjsdeqn{|| L(\beta(1) - L\beta(0))||\infty < tol}
 otherwise, it stops when \mjsdeqn{||\beta(1) - \beta(0))||_\infty < tol}.}
 }

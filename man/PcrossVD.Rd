@@ -7,7 +7,9 @@
 PcrossVD(data, K = NULL, get_mean = T, n_clust = NULL, OPT, ...)
 }
 \arguments{
-\item{data}{\link{list} containing the data, elements must be named \code{X} and \code{Y}.}
+\item{data}{\link{list} containing the data, elements must be named \code{X} and \code{Y}, where \code{X} is a
+\code{n x k} matrix and \code{Y} is a vector of length \code{n}. Here, \code{n} represents the number of
+observations and \code{k} is the number of  \mjseqn{\beta} coefficients.}
 
 \item{n_clust}{\link{integer} the number of clusters to use. If \code{NULL}, the function selects all available cores but one.}
 }
