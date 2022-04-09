@@ -28,7 +28,7 @@ test_that("real data - simple linear regression", {
   x <- as.matrix(trees$Height)
   y <- trees$Girth
   df <- list(X = x, Y = y)
-  opt <- optim(par = rep(1, 1), fn = LossD, X = x, Y = y, method = c("BFGS"))
+  opt <- optim(par = rep(1, 1), fn = LossD, X = x, Y = y, method = c("CG"))
   res <- GradD(data = df, stepsize = 1e-6, check_loss = F, verb = F)
   expect_equal(as.numeric(res$Beta_hat), as.numeric(opt$par), tolerance = 1)
 })
@@ -40,7 +40,7 @@ test_that("real data - multiple linear regression", {
   x <- as.matrix(trees[, -1])
   y <- trees$Girth
   df <- list(X = x, Y = y)
-  opt <- optim(par = rep(1, 2), fn = LossD, X = x, Y = y, method = c("BFGS"))
+  opt <- optim(par = rep(1, 2), fn = LossD, X = x, Y = y, method = c("CG"))
   res <- GradD(data = df, stepsize = 1e-6, check_loss = F, verb = F)
   expect_equal(as.numeric(res$Beta_hat), as.numeric(opt$par), tolerance = 1)
 })
@@ -55,7 +55,7 @@ test_that("real data - simple linear regression", {
   x <- as.matrix(trees$Height)
   y <- trees$Girth
   df <- list(X = x, Y = y)
-  opt <- optim(par = rep(1, 1), fn = LossD, X = x, Y = y, method = c("BFGS"))
+  opt <- optim(par = rep(1, 1), fn = LossD, X = x, Y = y, method = c("CG"))
   res <- SteepD(data = df, check_loss = F, verb = F)
   expect_equal(as.numeric(res$Beta_hat), as.numeric(opt$par), tolerance = 1)
 })
@@ -67,7 +67,7 @@ test_that("real data - multiple linear regression", {
   x <- as.matrix(trees[, -1])
   y <- trees$Girth
   df <- list(X = x, Y = y)
-  opt <- optim(par = rep(1, 2), fn = LossD, X = x, Y = y, method = c("BFGS"))
+  opt <- optim(par = rep(1, 2), fn = LossD, X = x, Y = y, method = c("CG"))
   res <- SteepD(data = df, check_loss = F, verb = F)
   expect_equal(as.numeric(res$Beta_hat), as.numeric(opt$par), tolerance = 1)
 })
@@ -81,7 +81,7 @@ test_that("real data - simple linear regression - L", {
   x <- as.matrix(trees$Height)
   y <- trees$Girth
   df <- list(X = x, Y = y)
-  opt <- optim(par = rep(1, 1), fn = LossD, X = x, Y = y, method = c("BFGS"))
+  opt <- optim(par = rep(1, 1), fn = LossD, X = x, Y = y, method = c("CG"))
   res <- SteepD(data = df, check_loss = T, verb = F)
   expect_equal(as.numeric(res$Beta_hat), as.numeric(opt$par), tolerance = 1)
 })
@@ -93,7 +93,7 @@ test_that("real data - multiple linear regression - L", {
   x <- as.matrix(trees[, -1])
   y <- trees$Girth
   df <- list(X = x, Y = y)
-  opt <- optim(par = rep(1, 2), fn = LossD, X = x, Y = y, method = c("BFGS"))
+  opt <- optim(par = rep(1, 2), fn = LossD, X = x, Y = y, method = c("CG"))
   res <- SteepD(data = df, check_loss = T, verb = F)
   expect_equal(as.numeric(res$Beta_hat), as.numeric(opt$par), tolerance = 1)
 })

@@ -4,7 +4,9 @@
 #' \mjsdeqn{L(\beta) = (X\beta - Y)^2}
 #' In this implementation, the stepsize is kept constant. To reach the minimum, it employs the gradient 
 #' \mjsdeqn{\nabla L(\beta) = 2X^{T}X\beta - 2X^{T}Y}
-#' @param data [list] containing the data, elements must be named \code{X} and \code{Y}.
+#' @param data [list] containing the data, elements must be named \code{X} and \code{Y}, where \code{X} is a 
+#' \code{n x k} matrix and \code{Y} is a vector of length \code{n}. Here, \code{n} represents the number of 
+#' observations and \code{k} is the number of  \mjseqn{\beta} coefficients. 
 #' @param stepsize [numeric] it must be strictly positive. It is the step size, also called learning parameter. The suggested value is \code{0.1*(1/nrow(data$X))} 
 #' @param init [vector] initial guesses of the parameter of interest. If \code{NULL}, values are all set equal to \code{1}. 
 #' @param tol [numeric] it must be strictly positive. It is the tolerance on the error evaluation between subsequent iterations. It is use to determine the stopping criteria.

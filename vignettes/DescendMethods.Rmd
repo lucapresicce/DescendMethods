@@ -102,8 +102,13 @@ PcrossVD(data,
 ```
 The only difference with respect to the previous one is the additional argument to get the number of cores/clusters the user want to use.
 In both functions, we rely on the map-reduce paradigm. In the parallel version, only the map transformation has been parallelized. We encounterd a problem for the parallel version,
-indeed we always get an error message
-**Aggiungere errore**
+indeed, running with `OPT = SteepD` we get an error message
+```{r, eval = FALSE}
+ Error in checkForRemoteErrors(val) : 
+  7 nodes produced errors; first error: oggetto "SteepD" non trovato 
+
+```
+
 
 Apparently, the problem has been solved by calling the OPT function at least once before the parallelization. Namely, 
 ```{r, eval=FALSE}
@@ -119,7 +124,8 @@ We are aware that this is not an elegant solution and it would be nice to unders
 
 Below are some code chunks as examples, in which the functions are implemented.
 
-simulated data
+# Simulated data:
+First of all, we test the functions on simulated data in a low dimension scenario. 
 ```{r}
 set.seed(1)
 n <- 100
@@ -127,89 +133,199 @@ x <- cbind(1, matrix(runif(n*3, 0, 10), nrow = n, ncol = 3))
 beta <- rnorm(4, 5, 5)
 y <- x %*% beta + rnorm(n)
 df <- list(X = x, Y = y)
-res <- GradD(data = df, verb = F, maxit = 3000)
-res$Beta_hat
+res_D   <- GradD(data = df, verb = F, maxit = 3000)
+res_SD  <- SteepD(data = df, verb = F) 
+res_D_loss   <- GradD(data = df, verb = F, check_loss = T , maxit = 3000)
+res_SD_loss  <- SteepD(data = df, verb = F,  check_loss = T ) 
+res_opt <- optim(par = rep(1, 4), fn = LossD, X = x, Y = y, method = c("CG"))
+
+
+cat('\n Estimated values - GradD \n')
+t(res_D$Beta_hat)
+
+cat('\n Estimated values - SteepD \n')
+t(res_D$Beta_hat)
+
+cat('\n Estimated values - GradD - loss \n')
+t(res_D$Beta_hat)
+
+cat('\n Estimated values - SteepD - loss \n')
+t(res_D$Beta_hat)
+
+cat('\n Estimated values - optim \n')
+t(res_opt$par)
+
+cat('\n Real values \n')
+beta
+
 ```
-
-```{r}
-set.seed(1)
-n <- 100
-x <- cbind(1, matrix(runif(n*5, 0, 10), nrow = n, ncol = 5))
-beta <- rnorm(6, 5, 5)
-y <- x %*% beta + rnorm(n)
-df <- list(X = x, Y = y)
-res <- SteepD(data = df, verb = F)
-res$Beta_hat
-```
+Both stopping criteria arrive to the same results.
 
 
+# Real data
+The next experiment is done using real data. First of all, we fit a simple linear regression without the intercept.
 
-simulated data - loss evaluation
-```{r}
-set.seed(1)
-n <- 100
-x <- cbind(1, matrix(runif(n*3, 0, 10), nrow = n, ncol = 3))
-beta <- rnorm(4, 5, 5)
-y <- x %*% beta + rnorm(n)
-df <- list(X = x, Y = y)
-res <- GradD(data = df, verb = F, check_loss = T, maxit = 3000)
-res$Beta_hat
-```
-
-```{r}
-set.seed(1)
-n <- 100
-x <- cbind(1, matrix(runif(n*5, 0, 10), nrow = n, ncol = 5))
-beta <- rnorm(6, 5, 5)
-y <- x %*% beta + rnorm(n)
-df <- list(X = x, Y = y)
-res <- SteepD(data = df, check_loss = T, verb = F)
-res$Beta_hat
-```
-
-
-
-real data
-```{r}
-x <- as.matrix(trees$Height)
-y <- trees$Girth
-df <- list(X = x, Y = y)
-opt <- optim(par = rep(1, 1), fn = LossD, X = x, Y = y, method = c("BFGS"))
-res <- GradD(data = df, stepsize = 1e-6, check_loss = T, maxit = 30000, verb = F)
-opt$par
-res$Beta_hat
-```
 
 ```{r}
 x <- as.matrix(trees$Height)
 y <- trees$Girth
 df <- list(X = x, Y = y)
-opt <- optim(par = rep(1, 1), fn = LossD, X = x, Y = y, method = c("BFGS"))
-res <- SteepD(data = df, check_loss = T, maxit = 30000, verb = T)
-opt$par
-res$Beta_hat
+
+res_D   <- GradD(data = df, verb = F, stepsize = 1e-8 ,maxit = 3000)
+res_SD  <- SteepD(data = df, verb = F) 
+res_D_loss   <- GradD(data = df, verb = F, stepsize = 1e-8, check_loss = T , maxit = 3000)
+res_SD_loss  <- SteepD(data = df, verb = F,  check_loss = T ) 
+res_opt <- optim(par = rep(1, ncol(x)), fn = LossD, X = x, Y = y, method = c("BFGS"))
+res_lm  <- lm(Girth ~ Height - 1, data = trees)
+
+
+cat('\n Estimated values - GradD \n')
+t(res_D$Beta_hat)
+
+cat('\n Estimated values - SteepD \n')
+t(res_D$Beta_hat)
+
+cat('\n Estimated values - GradD - loss \n')
+t(res_D$Beta_hat)
+
+cat('\n Estimated values - SteepD - loss \n')
+t(res_D$Beta_hat)
+
+cat('\n Estimated values - optim \n')
+t(res_opt$par)
+
+cat('\n Estimated values - lm \n')
+coef(res_lm)
 ```
+We noticed that `GradD` is sensible to the choice of 
+the stepsize. Indeed, if it is not small enough, it is even possible that the errors explode to $+\infty$.
 
+Then, we also introduced the intercept.
 
-
-real data - multiple
 ```{r}
-x <- as.matrix(trees[, -1])
+x <- cbind(1,as.matrix(trees[, -1]))
 y <- trees$Girth
 df <- list(X = x, Y = y)
-opt <- optim(par = rep(1, 2), fn = LossD, X = x, Y = y, method = c("BFGS"))
-res <- GradD(data = df, check_loss = T,stepsize = 1e-8, maxit = 30000, verb = F)
-opt$par
-res$Beta_hat
+
+res_D   <- GradD(data = df, verb = F, stepsize = 1e-8 ,maxit = 3000)
+res_SD  <- SteepD(data = df, verb = F) 
+res_D_loss   <- GradD(data = df, verb = F, stepsize = 1e-8, check_loss = T , maxit = 3000)
+res_SD_loss  <- SteepD(data = df, verb = F,  check_loss = T ) 
+res_opt <- optim(par = rep(1, ncol(x)), fn = LossD, X = x, Y = y, method = c("BFGS"))
+res_lm  <- lm(Girth ~ ., data = trees)
+
+
+cat('\n Estimated values - GradD \n')
+t(res_D$Beta_hat)
+
+cat('\n Estimated values - SteepD \n')
+t(res_D$Beta_hat)
+
+cat('\n Estimated values - GradD - loss \n')
+t(res_D$Beta_hat)
+
+cat('\n Estimated values - SteepD - loss \n')
+t(res_D$Beta_hat)
+
+cat('\n Estimated values - optim \n')
+t(res_opt$par)
+
+cat('\n Estimated values - lm \n')
+coef(res_lm)
 ```
 
+
+# Benchmark on simulated data
 ```{r}
-x <- as.matrix(trees[, -1])
-y <- trees$Girth
-df <- list(X = x, Y = y)
-opt <- optim(par = rep(1, 2), fn = LossD, X = x, Y = y, method = c("BFGS"))
-res <- SteepD(data = df, check_loss = T, verb = F)
-opt$par
-res$Beta_hat
+library(microbenchmark)
+
+set.seed(445)
+n = 100
+k = 5
+X <- cbind(1, matrix(runif(n*(k-1), 0, 10), nrow = n, ncol = k-1))
+beta_true = rnorm(n = k)
+y = X %*% beta_true + rnorm(n)
+df <- list(X = X, Y = y)
+
+microbenchmark(
+  optim(par = rep(1, k), fn = LossD, X = X, Y = y, method = c("BFGS")),
+  optim(par = rep(1, k), fn = LossD, X = X, Y = y, method = c("CG")),
+  SteepD(data = df),
+  GradD(data = df)
+)
 ```
+
+# Cross Validation
+Usage example for leave-one-out cross validation.
+```{r}
+set.seed(445)
+n = 1000
+x1 = runif(n)
+x2 = rnorm(n)
+x3 = rnorm(n)
+x4 = rnorm(n)
+y = 1+3.6*x1 + 5.3*x2 + 4.2*x3 + 2.1*x4 + rnorm(n)
+x <- cbind(1, x1, x2, x3, x4)
+df <- list(X = x, Y = y)
+
+tictoc::tic()
+DescendMethods::CrossVD(data = df, OPT = SteepD)
+tictoc::toc()
+
+tictoc::tic()
+DescendMethods::PcrossVD(data = df, OPT = SteepD)
+tictoc::toc()
+
+```
+
+Usage example for K-fold cross validation.
+
+```{r}
+set.seed(445)
+n = 1000
+x1 = runif(n)
+x2 = rnorm(n)
+x3 = rnorm(n)
+x4 = rnorm(n)
+y = 1+3.6*x1 + 5.3*x2 + 4.2*x3 + 2.1*x4 + rnorm(n)
+x <- cbind(1, x1, x2, x3, x4)
+df <- list(X = x, Y = y)
+
+tictoc::tic()
+CrossVD(data = df, K = 5, OPT = SteepD)
+tictoc::toc()
+
+tictoc::tic()
+PcrossVD(data = df, K = 5, OPT = SteepD)
+tictoc::toc()
+```
+The K-fold cross validation is less computational expensive than the leave-one-out counter part. Therefore the fixed costs of the parallelization exceeds its gain. However, if we increase the dimensionality of the problem, the advantages are clear.
+
+```{r}
+set.seed(445)
+n = 10000
+k = 25
+X = matrix(1,nrow = n, ncol = k-1)
+X = apply(X, c(1,2), rnorm, n=1)
+X = cbind(1,X)
+beta_true = rnorm(n = k)
+y = X %*% beta_true + rnorm(n)
+df <- list(X = X, Y = y)
+
+tictoc::tic()
+CrossVD(data = df, K = 10, OPT = SteepD)
+tictoc::toc()
+
+tictoc::tic()
+PcrossVD(data = df, K = 10, OPT = SteepD)
+tictoc::toc()
+```
+
+
+
+
+
+
+
+
 
