@@ -72,11 +72,133 @@ We want to notice that, since the stopping criteria consider only the absolute v
 
 ## Question 3 - Considerations
 
-In order to answer this question, we need to make an example. We have choose to 
+In order to answer this question, we need to make some examples. We have chosen to use simulated datasets to compare the two functions, dividing the various examples based on the amount of data and dimensionality related to the problem.
+
+### Low dimensionality 
+
+Starting with small dataset
 ```{r}
-# g <- GradD()
-# s <- SteepD()
+set.seed(1)
+k <- 2
+n <- 100
+x <- cbind(1, matrix(runif(n*k), nrow = n, ncol = k))
+beta <- runif(k+1, -10, 10)
+y <- x %*% beta + rnorm(n)
+df <- list(X = x, Y = y)
+
+g <- GradD(data = df, verb = F, maxit = 3000)
+s <- SteepD(data = df, verb = F)
+
+cat('\n Estimated values - GradD \n')
+as.numeric(t(g$Beta_hat))
+
+cat('\n Estimated values - SteepD \n')
+as.numeric(t(s$Beta_hat))
+
+cat('\n Real values \n')
+beta
+
+cat('\n Elapsed time - GradD \n')
+g$Time
+
+cat('\n Elapsed time - SteepD \n')
+s$Time
 ```
+
+Continuing with bigger dataset
+```{r}
+set.seed(1)
+k <- 2
+n <- 10^5
+x <- cbind(1, matrix(runif(n*k), nrow = n, ncol = k))
+beta <- runif(k+1, -10, 10)
+y <- x %*% beta + rnorm(n)
+df <- list(X = x, Y = y)
+
+g <- GradD(data = df, verb = F, stepsize = 1e-06, maxit = 3000)
+s <- SteepD(data = df, verb = F) 
+
+cat('\n Estimated values - GradD \n')
+as.numeric(t(g$Beta_hat))
+
+cat('\n Estimated values - SteepD \n')
+as.numeric(t(s$Beta_hat))
+
+cat('\n Real values \n')
+beta
+
+cat('\n Elapsed time - GradD \n')
+g$Time
+
+cat('\n Elapsed time - SteepD \n')
+s$Time
+```
+
+### High dimensionality 
+
+Starting with small dataset
+```{r}
+set.seed(1)
+k <- 25
+n <- 100
+x <- cbind(1, matrix(runif(n*k), nrow = n, ncol = k))
+beta <- runif(k+1, -10, 10)
+y <- x %*% beta + rnorm(n)
+df <- list(X = x, Y = y)
+
+g <- GradD(data = df, verb = F, stepsize = 1e-03, maxit = 3000)
+s <- SteepD(data = df, verb = F)
+
+cat('\n Estimated values - GradD \n')
+as.numeric(t(g$Beta_hat))
+
+cat('\n Estimated values - SteepD \n')
+as.numeric(t(s$Beta_hat))
+
+cat('\n Real values \n')
+beta
+
+cat('\n Elapsed time - GradD \n')
+g$Time
+
+cat('\n Elapsed time - SteepD \n')
+s$Time
+```
+
+Continuing with bigger dataset
+```{r}
+set.seed(1)
+k <- 25
+n <- 10^5
+x <- cbind(1, matrix(runif(n*k), nrow = n, ncol = k))
+beta <- runif(k+1, -10, 10)
+y <- x %*% beta + rnorm(n)
+df <- list(X = x, Y = y)
+
+g <- GradD(data = df, verb = F, stepsize = 1e-06, maxit = 3000)
+s <- SteepD(data = df, verb = F) 
+
+cat('\n Estimated values - GradD \n')
+as.numeric(t(g$Beta_hat))
+
+cat('\n Estimated values - SteepD \n')
+as.numeric(t(s$Beta_hat))
+
+cat('\n Real values \n')
+beta
+
+cat('\n Elapsed time - GradD \n')
+g$Time
+
+cat('\n Elapsed time - SteepD \n')
+s$Time
+```
+
+From this examples, it's easy to see that the function which implements steepest descend method, `SteepD()`, is faster than the other one that implements the gradient descend method, `GradD()`, under all points of view.
+
+An important disadvantage of `GradD()`, respect to `SteepD()`, is its dependence from `stepsize` argument, with respect to it is very sensitive. On the contrary, this problem not affects `SteepD()`.
+
+Then, not only the results provided by `SteepD()` are faster, but they are also more robusts, since they do not depend from another argument (the `stepsize`) which affects the optimization algorithm critically in the case of `GradD()`.
 
 
 ## Question 4 - Parallel cross-validation
@@ -124,7 +246,7 @@ We are aware that this is not an elegant solution and it would be nice to unders
 
 Below are some code chunks as examples, in which the functions are implemented.
 
-# Simulated data:
+### Simulated data:
 First of all, we test the functions on simulated data in a low dimension scenario. 
 ```{r}
 set.seed(1)
@@ -162,7 +284,7 @@ beta
 Both stopping criteria arrive to the same results.
 
 
-# Real data
+### Real data
 The next experiment is done using real data. First of all, we fit a simple linear regression without the intercept.
 
 
@@ -235,7 +357,7 @@ coef(res_lm)
 ```
 
 
-# Benchmark on simulated data
+### Benchmark on simulated data
 ```{r}
 library(microbenchmark)
 
@@ -254,7 +376,8 @@ microbenchmark(
   GradD(data = df)
 )
 ```
-# Prediction 
+
+## Prediction 
 The package also provides specific functions for prediction in linear models. 
 `PredictD` gets as input the estimated coefficients and the new covariates and returns the 
 pointwise estimation. To emulate the usage of the well know `stats::predict` function, the new
@@ -265,7 +388,7 @@ by the vector of the estimated coefficients.
 Mean Squared error.
 
 
-# Cross Validation
+### Cross Validation
 Usage example for leave-one-out cross validation.
 ```{r}
 set.seed(445)
@@ -315,8 +438,7 @@ The K-fold cross validation is less computational expensive than the leave-one-o
 set.seed(445)
 n = 10000
 k = 25
-X = matrix(1,nrow = n, ncol = k-1)
-X = apply(X, c(1,2), rnorm, n=1)
+X = matrix( rnorm( n*(k-1) ), nrow = n, ncol = k-1)
 X = cbind(1,X)
 beta_true = rnorm(n = k)
 y = X %*% beta_true + rnorm(n)
