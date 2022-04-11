@@ -7,7 +7,7 @@
 MseD(coef, data)
 }
 \arguments{
-\item{coef}{\link{vector} containing the estimated coefficients \mjseqn{\hat{beta}}.}
+\item{coef}{\link{vector} containing the estimated coefficients \mjseqn{\hat{\beta}}.}
 
 \item{data}{\link{list} containing the data, elements must be named \code{X} and \code{Y}, where \code{X} is a
 \code{n x k} matrix and \code{Y} is a vector of length \code{n}. Here, \code{n} represents the number of

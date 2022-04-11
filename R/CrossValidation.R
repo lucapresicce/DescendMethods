@@ -103,8 +103,6 @@ PcrossVD = function(data,
   n = nrow(X)
   p = ncol(X)
   
-  ### ? trucco, se lo togli non funziona ? ###
-  OPT(df, maxit=1)
   
   ## 1 - define the cluster
   if(is.null(n_clust) || n_clust >= parallel::detectCores()) n_clust <- parallel::detectCores() - 1
@@ -112,6 +110,8 @@ PcrossVD = function(data,
   cluster <- makeCluster(n_clust, type = "SOCK")
   registerDoSNOW(cluster)
   
+  # export dependencies in cluster
+  clusterExport(cluster, list("SteepD", "GradD")) 
   ## 2 - cross validation
   
   if(is.null(K) || K>=n){

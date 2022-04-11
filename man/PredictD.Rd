@@ -7,7 +7,7 @@
 PredictD(coef, newdata)
 }
 \arguments{
-\item{coef}{\link{vector} containing the estimated coefficients \mjseqn{\hat{beta}}.}
+\item{coef}{\link{vector} containing the estimated coefficients \mjseqn{\hat{\beta}}.}
 
 \item{newdata}{\link{data.frame} whose number of rows represents the number of new data to be predicted and the
 number of columns must be equal to the length of \code{coef}. None check is done on the order of the
