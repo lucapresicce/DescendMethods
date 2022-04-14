@@ -4,7 +4,7 @@
 \alias{CrossVD}
 \title{CrossVD}
 \usage{
-CrossVD(data, K = NULL, get_mean = T, OPT, ...)
+CrossVD(data, K = NULL, get_mean = T, verb = F, OPT, ...)
 }
 \arguments{
 \item{data}{\link{list} containing the data, elements must be named \code{X} and \code{Y}, where \code{X} is a
@@ -15,6 +15,8 @@ observations and \code{k} is the number of  \mjseqn{\beta} coefficients.}
 If \code{K} is larger than the number of observations, the Leave-one-out cross validation is run by default.}
 
 \item{get_mean}{\link{boolean} if \code{TRUE}, the CV-MSE is returned, otherwise the function returns the MSE computed for each fold.}
+
+\item{verb}{\link{bool} if \code{TRUE}, it prints more information about the status of the algorithm.}
 
 \item{OPT}{\link{function} the optimization function whose prediction power has to be tested. If can only be equal to
 \code{\link{GradD}} or \code{\link{SteepD}}.}

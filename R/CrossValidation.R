@@ -15,6 +15,7 @@
 CrossVD = function(data, 
                    K = NULL, 
                    get_mean = T,
+                   verb = F,
                    OPT, ...){
   
   ## 0 - input controls
@@ -33,7 +34,9 @@ CrossVD = function(data,
   l = list(...)
   ## 1 - data splitting
   if(is.null(K)||K>=n){
-    pb = txtProgressBar(min = 0, max = n, initial = 0, style = 3)
+    if(verb){
+      pb = txtProgressBar(min = 0, max = n, initial = 0, style = 3)  
+    }
     MSE = unlist(lapply(1:n, FUN = function(i)
       {
         # fit without i
@@ -43,7 +46,9 @@ CrossVD = function(data,
         # compute prediction
         newdata = as.data.frame( t(X[i,]) )
         ypred = PredictD(coef = beta_hat, newdata = newdata)
-        setTxtProgressBar(pb, i)
+        if(verb){
+          setTxtProgressBar(pb, i)
+        }
         return((ypred - Y[i])^2)
       }))
   } else{
@@ -52,7 +57,9 @@ CrossVD = function(data,
     if(K <= 1 & !as.integer(K)) stop('The number of folds K must be a greater than 1 and positive integer')
     folds = sample(1:K, n, T)
     
-    pb = txtProgressBar(min = 0, max = K, initial = 0, style = 3)
+    if(verb){
+      pb = txtProgressBar(min = 0, max = K, initial = 0, style = 3)
+    }
     MSE = unlist(lapply(1:K, FUN = function(k)
     {
       # fit for fold k
@@ -62,7 +69,10 @@ CrossVD = function(data,
       # compute prediction
       newdata = as.data.frame( X[folds==k,] )
       ypred = PredictD(coef = beta_hat, newdata = newdata)
-      setTxtProgressBar(pb, k)
+      
+      if(verb){
+        setTxtProgressBar(pb, k)
+      }
       return( mean((ypred - Y[folds==k])^2) )
     }))
     
