@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 ```
 <center>
 
-![](sticker.jpg)
+![](sticker.jpg){width=40%}
 
 </center>
 
