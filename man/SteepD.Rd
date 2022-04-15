@@ -17,7 +17,7 @@ observations and \code{k} is the number of  \mjseqn{\beta} coefficients.}
 
 \item{maxit}{\link{integer} it must be strictly positive. It is the maximum number of iterations.}
 
-\item{verb}{\link{bool} if \code{TRUE}, it prints more information about the status of the algorithm.}
+\item{verb}{\link{bool} if \code{TRUE}, it prints more information about the status of the algorithm (default is \code{FALSE}).}
 
 \item{check_loss}{\link{bool} if \code{TRUE}, the algorithm stops when
 \mjsdeqn{|| L(\beta(1) - L\beta(0))||\infty < tol}

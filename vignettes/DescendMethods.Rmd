@@ -1,5 +1,9 @@
 ---
-title: "DescendMethods"
+title: |
+  <center>
+  ![](sticker.jpg){width=40%}  
+  DescendMethods
+  </center>
 author: "Luca Presicce, Alessandro Colombi"
 output: rmarkdown::html_vignette
 vignette: >
@@ -13,12 +17,8 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+options(rmarkdown.html_vignette.check_title = FALSE)
 ```
-<center>
-
-![](sticker.jpg){width=40%}
-
-</center>
 
 ## Contents of the package
 

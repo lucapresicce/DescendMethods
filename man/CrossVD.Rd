@@ -16,7 +16,7 @@ If \code{K} is larger than the number of observations, the Leave-one-out cross v
 
 \item{get_mean}{\link{boolean} if \code{TRUE}, the CV-MSE is returned, otherwise the function returns the MSE computed for each fold.}
 
-\item{verb}{\link{bool} if \code{TRUE}, it prints more information about the status of the algorithm.}
+\item{verb}{\link{bool} if \code{TRUE}, it prints more information about the status of the algorithm (default is \code{FALSE}).}
 
 \item{OPT}{\link{function} the optimization function whose prediction power has to be tested. If can only be equal to
 \code{\link{GradD}} or \code{\link{SteepD}}.}
