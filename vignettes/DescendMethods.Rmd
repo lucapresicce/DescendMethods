@@ -214,6 +214,7 @@ The call for the sequential version is the following one:
 CrossVD(data, 
         K = NULL, 
         get_mean = T,
+        verb = F,
         OPT, ...)
 ```
 As usual, all the arguments are all explained in the function documentation. We here just report that the idea is to build a function that takes the name of the optimization function to be used as an argument. At the moment, `OPT` accepts only `GradD` and `SteepD`. 
@@ -228,23 +229,22 @@ PcrossVD(data,
         OPT, ...)
 ```
 The only difference with respect to the previous one is the additional argument to get the number of cores/clusters the user want to use.
-In both functions, we rely on the map-reduce paradigm. In the parallel version, only the map transformation has been parallelized. We encounterd a problem for the parallel version,
-indeed, running with `OPT = SteepD` we get an error message
-```{r, eval = FALSE}
- Error in checkForRemoteErrors(val) : 
-  7 nodes produced errors; first error: oggetto "SteepD" non trovato 
+In both functions, we rely on the map-reduce paradigm. In the parallel version, only the map transformation has been parallelized. 
 
-```
-
-
-Apparently, the problem has been solved by calling the OPT function at least once before the parallelization. Namely, 
-```{r, eval=FALSE}
-OPT(df, maxit=1)
-## 1 - define the cluster
-cluster <- makeCluster(n_clust, type = "SOCK")
-registerDoSNOW(cluster)
-```
-We are aware that this is not an elegant solution and it would be nice to understand what is happening to solve the problem.
+<!-- We encounterd a problem for the parallel version, -->
+<!-- indeed, running with `OPT = SteepD` we get an error message -->
+<!-- ```{r, eval = FALSE} -->
+<!--  Error in checkForRemoteErrors(val) :  -->
+<!--   7 nodes produced errors; first error: oggetto "SteepD" non trovato  -->
+<!-- ``` -->
+<!-- Apparently, the problem has been solved by calling the OPT function at least once before the parallelization. Namely,  -->
+<!-- ```{r, eval=FALSE} -->
+<!-- OPT(df, maxit=1) -->
+<!-- ## 1 - define the cluster -->
+<!-- cluster <- makeCluster(n_clust, type = "SOCK") -->
+<!-- registerDoSNOW(cluster) -->
+<!-- ``` -->
+<!-- We are aware that this is not an elegant solution and it would be nice to understand what is happening to solve the problem. -->
 
 
 ## Examples 
@@ -256,8 +256,9 @@ First of all, we test the functions on simulated data in a low dimension scenari
 ```{r}
 set.seed(1)
 n <- 100
-x <- cbind(1, matrix(runif(n*3, 0, 10), nrow = n, ncol = 3))
-beta <- rnorm(4, 5, 5)
+k <- 4
+x <- cbind(1, matrix(runif(n*(k-1), 0, 10), nrow = n, ncol = (k-1)))
+beta <- rnorm(k, 5, 5)
 y <- x %*% beta + rnorm(n)
 df <- list(X = x, Y = y)
 res_D   <- GradD(data = df, verb = F, maxit = 3000)
@@ -367,18 +368,18 @@ coef(res_lm)
 library(microbenchmark)
 
 set.seed(445)
-n = 100
-k = 5
-X <- cbind(1, matrix(runif(n*(k-1), 0, 10), nrow = n, ncol = k-1))
-beta_true = rnorm(n = k)
-y = X %*% beta_true + rnorm(n)
+n <- 100
+k <- 5
+X <- cbind(1, matrix(runif(n*(k-1), 0, 10), nrow = n, ncol = (k-1)))
+beta_true <- rnorm(n = k)
+y <- X %*% beta_true + rnorm(n)
 df <- list(X = X, Y = y)
 
 microbenchmark(
-  optim(par = rep(1, k), fn = LossD, X = X, Y = y, method = c("BFGS")),
-  optim(par = rep(1, k), fn = LossD, X = X, Y = y, method = c("CG")),
-  SteepD(data = df),
-  GradD(data = df)
+  BFGS = optim(par = rep(1, k), fn = LossD, X = X, Y = y, method = c("BFGS")),
+  CG = optim(par = rep(1, k), fn = LossD, X = X, Y = y, method = c("CG")),
+  SteepD = SteepD(data = df),
+  Gradd = GradD(data = df)
 )
 ```
 
@@ -397,12 +398,12 @@ Mean Squared error.
 Usage example for leave-one-out cross validation.
 ```{r}
 set.seed(445)
-n = 1000
-x1 = runif(n)
-x2 = rnorm(n)
-x3 = rnorm(n)
-x4 = rnorm(n)
-y = 1+3.6*x1 + 5.3*x2 + 4.2*x3 + 2.1*x4 + rnorm(n)
+n <- 1000
+x1 <- runif(n)
+x2 <- rnorm(n)
+x3 <- rnorm(n)
+x4 <- rnorm(n)
+y <- 1+3.6*x1 + 5.3*x2 + 4.2*x3 + 2.1*x4 + rnorm(n)
 x <- cbind(1, x1, x2, x3, x4)
 df <- list(X = x, Y = y)
 
@@ -420,12 +421,12 @@ Usage example for K-fold cross validation.
 
 ```{r}
 set.seed(445)
-n = 10000
-x1 = runif(n)
-x2 = rnorm(n)
-x3 = rnorm(n)
-x4 = rnorm(n)
-y = 1+3.6*x1 + 5.3*x2 + 4.2*x3 + 2.1*x4 + rnorm(n)
+n <- 10000
+x1 <- runif(n)
+x2 <- rnorm(n)
+x3 <- rnorm(n)
+x4 <- rnorm(n)
+y <- 1+3.6*x1 + 5.3*x2 + 4.2*x3 + 2.1*x4 + rnorm(n)
 x <- cbind(1, x1, x2, x3, x4)
 df <- list(X = x, Y = y)
 
@@ -441,12 +442,12 @@ The K-fold cross validation is less computational expensive than the leave-one-o
 
 ```{r}
 set.seed(445)
-n = 10000
-k = 25
-X = matrix( rnorm( n*(k-1) ), nrow = n, ncol = k-1)
-X = cbind(1,X)
-beta_true = rnorm(n = k)
-y = X %*% beta_true + rnorm(n)
+n <- 100000
+k <- 50
+X <- matrix( rnorm( n*(k-1) ), nrow = n, ncol = (k-1))
+X <- cbind(1,X)
+beta_true <- rnorm(n = k)
+y <- X %*% beta_true + rnorm(n)
 df <- list(X = X, Y = y)
 
 tictoc::tic()

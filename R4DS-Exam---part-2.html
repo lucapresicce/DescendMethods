@@ -1,0 +1,1011 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content="Luca Presicce, Alessandro Colombi" />
+
+
+<title>DescendMethods.knit</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+
+<style type="text/css">
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore"><center>
+<img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEBLAEsAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/2wBDAQkJCQwLDBgNDRgyIRwhMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjL/wAARCAJYAgYDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD3+iiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKbJIkUbSSOqIgLMzHAAHUk1h654t07Q2aF2aa7Az5EfbIJG49B29TyDivONb8T6jrcjrLK0VqT8tuhwoHGM/3ugPPfpiolNI9DC5dVr2b0j3/AMjs9c8fWlmrQ6WFurgHHmMD5S8nPcFunbjnOe1efahqt9qswlvrmSZh90Nwq9OgHA6DpVOisZSbPosNgqWHXuLXv1Cug0bxhqmkbI/M+02q4HkzHOBxwrdRwMDsM9K5+ikm1sb1KUKseWauj2fSPE+l61hLafZOf+WEvyv36DoeBngnHetivAo5HikWSN2R0IZWU4II6EGuy0Lx/cWaiDVVkuohjbKuPMUAdD/e7ck568mtY1O54OKyiUfeo6rt1PS6Kq6fqNpqlqLmynWaIkrkAjBHYg8j8atVqeLKLi7NWYUUUUCCiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAoqOeeG2haa4ljiiX7zyMFUduSa4TWfiJ9+HSIfUfaJh9RlV/Ign8RScktzow+Fq13amjsdU1ey0e1ae8mVBglUyN8mOyjv1H0zzivOtd8dX2osYrAyWVsMjKt+8fngkj7vQcD35NcvPPNczNNcSySyt955GLMe3JNR1jKbZ9DhcrpUfen7z/D7goopCcU6VGpWly01dnXisZQwlP2leSiv626v5C0hb0ppOaK+hwuTwh71bV9un/BPgs04sq1r08IuWPf7Xy7fn6C5NKDmm0V1YnLaFdbWfdHl5dxDjME7OXPHs9fufT+tB9FNBpwOa+cxWBrYfWSuu5+hZbneEzBJU3aX8r3/4Py+dixZX11p1wLiznkhlH8SHGRnOD6jgcHiu/wBA8fw3Hk2uqr5Uxwv2kY2MeeWH8Pb1HJ6CvOKK5Iya2O7EYSliFaa179T32ORJY1kjdXRwGVlOQQehBp1eKaN4g1DQ5t9pLmM53QyZMbE9yM9eByOePSvR9C8Z6frLCGQfZLrjEcjja5JwArcZPTjAPPGcVtGaZ87istq0PeWsf66HSUUUVZ5wUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFY+r+J9L0XKXM++cf8sIvmft1HQcHPJGe1JuxcKc6kuWCuzYrk9d8dWOnKYrAx3tycjKt+7Tjgkj73UcD35FcVrni3UdcVoXZYbQnPkR98Ekbj1Pb0HAOKwaylU7Hu4XKEver/d/maGra1fa3cCa9m3bc7EUYVATnAH9TzwOaz6KKhJydlqz2f3dGHRRXySCgnFNLUlezhcnnL3q2i7dT5DM+LaVO9PBrmf8AM9l6Lr+XqKTmkoor6ClRhSjywVkfB4nFVsVUdSvJyfn/AFp8gooorQ5wooooAKKKKGr6MabTutxQ3rTqZRnFePi8ohU96j7r7dP+AfW5XxXXoWp4r349+q/z+evmPopAaWvnq1CpRly1FY++weOw+Mp+0oSuvy9UdNonjbUdJjS3lC3dqg2rG5wyjnADfiOueBgYr0fSte07Wo91ncKzgZaJuHXpnI/EDIyPevEqdHI8UiyRuyOhDKynBBHQg1EZtGGKyylW96Puv+uh77RXnmhfEGRGEOtDehwFuI0wwOf4gOMYPYZ46HNd3ZX1rqNuLiznjmiP8SHODjOD6HkcHmtlJPY+dxGEq4d2mtO/QsUUUVRzBRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRTZJEijaSR1REBZmY4AA6kmgB1VdQ1G00u1NzezrDECFyQTknsAOT+FcfrfxCgSN4NIRpJCMC4cYVenIU8nv1xyO4rgr2+utRuDcXk8k0p/ic5wM5wPQcngcVnKolsethcpqVPeq+6vx/4H9aHVa54+u7xmh0sNa25GPMYDzW4Oe5C9e3PGc9q4+SR5ZGkkdndyWZmOSSepJptFYtt7n0FHD06MeWmrBRSE4pCc16OEy2rX1fux7/5Hi5pxHhcEnCL559l09X0/MUmm0UV9HhsFRw69xa9+p+e5jnGKzCX76Xu9Etv+D6sKKKK6jywooooAKKKKACiiigAooooAKKKKAClBxSUVFSlCrHlmro3w+JrYap7SjJxfkOBzS0ylBrwMXk8o+9Q1Xb/ACPusr4thO1PGqz/AJlt810+Wnkh1XNP1W+0qYy2NzJCx+8F5VuvUHg9T1qnnNFeJKMoOzVmfYxlTrQvFqUX80z03Q/H1peKsOqBbW4Jx5ig+U3Ix3JXr344zntXZV4BW1onifUdEkRYpWltQfmt3OVI5zj+71J479c1canc8jFZQpe9Q0fb/I9lorB0Pxbp2uMsKM0N2RnyJO+ACdp6Hv6HgnFb1app7HhVKU6UuWaswooopmYUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUVl6z4g0/Q4d93LmQ42wx4MjA9wM9ODyeOPWvONd8Z6hrKmGMfZLXnMcbnc4IwQzcZHXjAHPOcVMppHbhcBVxGqVl3O313xnp+jMYYx9ruucxxuNqEHBDNzg9eME8c4zXnGs+INQ1ybfdy4jGNsMeRGpHcDPXk8nnn0rLorGU2z6LC4Clh9UrvuFFFNLelbYfCVcQ7U18+hGPzXC4CN68tei6v5f56DicU0mkor6PC5XSo+9P3pfh9x+fZpxNisZeFL3IeW79X+i/EKKKK9M+aCiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACnBvWm0VzYjCUsQrTWvfqell+bYrASvRlp2ez+X+Wo+imA4pwOa+cxWV1qHvR96P9dD9CyziXC420J+5Ps9n6P9HZ9ri112h+PL3T1WC/VryDP32Y+auSO5+9jng+vUCuRorzU2tj3a1CnWjy1Fc9x0vV7LWLVZ7OZXGAWTI3x57MO3Q/XHGavV4JBPNbTLNbyyRSr9142KsO3BFd5o3xE+5Dq8PoPtEI+gyy/mSR+AraNRPc8DFZTOHvUtV26/8E7+io4J4bmFZreWOWJvuvGwZT24IqStDx2raMKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKbJIkUbSSOqIgLMzHAAHUk1x+uePrSzVodLC3VwDjzGB8peTnuC3TtxznPak2lubUcPUrS5aaudVe31rp1ubi8njhiH8TnGTjOB6ng8DmuC1v4hTvI8GkIscYOBcOMs3TkKeB3654PY1x+oajd6pdG5vZ2mlIC5IAwB2AHA/CqtYyqN7H0GFymnT96r7z/D/g/wBaDpJHlkaSR2d3JZmY5JJ6kmm0UhOKKdKdWXLBXZ6GIxFHDU3UrSUYoWkJpCc0le9hcnS96vr5f8E+GzTi6Ur08ErL+Z7/ACXT5/cgzmiiivcjGMFyxVkfF1Kk6s3Oo7t7thRRRTICiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKAFBxTgc0yivNxWWUq/vR92X9dD6LK+JMVgrQn78Oz3Xo/02H0U0NTq+cxODq4d++tO/Q/QsuzfC4+N6Mteqe6/z9UaGk61faJcGaym27sb0YZVwDnBH9Rzyea9D0Lx1Y6ioivzHZXIwMs37t+OSCfu9Dwfbk15ZRXPGTRvicDRxGslZ9z3+ivHtD8W6joarCjLNaA58iTtkgnaeo7+o5JxXpOkeJ9L1rCW0+yc/wDLCX5X79B0PAzwTjvW0ZpnzmKy+rh9d13X69jYoooqzhCiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKz9W1qx0S3E17Nt3Z2IoyzkDOAP6njkc0FRhKb5Yq7NCsHXPFunaGzQuzTXYGfIj7ZBI3HoO3qeQcVxWu+Or7UWMVgZLK2GRlW/ePzwSR93oOB78muTrKVTse3hcob96v93+Zsav4n1TWspcz7ID/AMsIvlTt1HU8jPJOO1Y9FFZatnuRhClG0UkkFGcUhb0ptevhcoqVPeq+6vx/4B8tmnFdDD3p4X35d/sr/P5feKTSUUV9FRw9OhHlpqx8BjMdiMZPnrycn+C9F0CiiitTkCiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiilKKkrSV0XCcqclODs11Q4GlplKDivFxWTxleVDR9uh9jlnFtSnanjFzL+Zb/Ndfz9WOp0cjxSLJG7I6EMrKcEEdCDTAc0tfP1KU6UuWasz7vD4qjioc9GSkvI7LQ/H13ZssOqBrq3Ax5igeavAx3Abp355zntXoen6jaapai5sp1miJK5AIwR2IPI/GvCqsWV9dadcC4s55IZR/EhxkZzg+o4HB4ojUa3OLFZVTq+9T91/ge70VwuifEKB40g1dGjkAwbhBlW68lRyO3TPJ7Cu4jkSWNZI3V0cBlZTkEHoQa2Uk9j56vhqtCVqiHUUUUzAKKKKACiiigAooooAKKKKACiiigAqOeeG2haa4ljiiX7zyMFUduSa5fXfHVjpymKwMd7cnIyrfu044JI+91HA9+RXnWqave6xdNPeTM5ySqZOyPPZR26D645zUSmkenhcrq1ven7q/H7jstZ+In34dIh9R9omH1GVX8iCfxFcHPPNczNNcSySyt955GLMe3JNR0Vi5N7n0OHwtKgrU0FFITikJzXbhcvrYjVK0e7/rU83M8+wmAvGT5p/yr9e35+QpOKaTmiivo8LgKOHWiu+7PzzMs8xePbU3yx/lW3z7/wBaIKKKK7TxgooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKUGkorKtQp1o8tRXOrCY2vhKntKEnF/n6rqPBzRTKUN618/isonD3qOq7df+Cfe5XxZRrWp4tcku/2X/l+Xmh1amjeINQ0ObfaS5jOd0MmTGxPcjPXgcjnj0rLorxneLs9z6xqFWGtmmet6F4z0/WWEMg+yXXGI5HG1yTgBW4yenGAeeM4rpK8ArpNC8Z6hoyiGQfa7XjEcjncgAwArc4HTjBHHGM1rGp3PExWT/aofd/wf8z1uis3Ste07Wo91ncKzgZaJuHXpnI/EDIyPetKtb3PDnCUHyyVmFFFFBIUUUUAFFU9Q1Wx0qES31zHCp+6G5ZunQDk9R0rz7XPH13eM0OlhrW3Ix5jAea3Bz3IXr254zntUykkdeGwVXEP3Fp36HZ634n07RI3WWVZboD5bdDlieMZ/u9Qee3TNeca54t1HXFaF2WG0Jz5EffBJG49T29BwDisOSR5ZGkkdndyWZmOSSepJptYym2fRYXLqVCzesu/+QUUUhNaUMPVry5aauXjcww2Chz15W/N+iFppakor6LC5TTpe9U95/gfn+Z8VYjE3p4f3I/i/n0+X3hRRRXrHyzd9WFFFFAgooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAM4pwNNorkxOBo4jWS17nrZbnWLy92pyvH+V7f8AA+Q+img4pQc183isurYfXePf/PsfoeV8QYXH2hfln2f6Pr+fkPjkeKRZI3ZHQhlZTggjoQa7jRPiFOkiQauiyRk4Nwgwy9eSo4PbpjgdzXC0VwqTWx61fDUq8bVEe72V9a6jbi4s545oj/Ehzg4zg+h5HB5qxXhmn6rfaVMZbG5khY/eC8q3XqDwep616Dofj60vFWHVAtrcE48xQfKbkY7kr178cZz2rWNRPc+fxWVVaXvU/eX4nZUU2ORJY1kjdXRwGVlOQQehBorQ8o8Kvb661G4NxeTyTSn+JznAznA9ByeBxVeignFc0YynLlirtn3E506MHKTUYr5JBSE4pCaSvdwmT396v93+f/APis04uSvTwK/7ef6L/P7hSc0lFFe9CnGn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qf73bgjHXg11llY2unW4t7OCOGIfwoMZOMZPqeByeasVrGmlufP4rNalX3afur8RscaRRrHGioiAKqqMAAdABTqKK0PKCiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooA5HXPAdlqDNPYMtnPj7iqPKbAPYfdzxyPToTXnmqaRe6PdNBeQshyQr4OyTHdT36j6Z5xXuNRzwQ3MLQ3EUcsTfeSRQynvyDUSpp7Hp4XNKtH3Z+8vxPBKK9A1n4d/fm0ib1P2eY/U4VvyAB/E1wc8E1tM0NxFJFKv3kkUqw78g1i4tbn0OHxVKur02aGjeINQ0ObfaS5jOd0MmTGxPcjPXgcjnj0r0fQvGen6ywhkH2S64xHI42uScAK3GT04wDzxnFeSUU4zaMsVgKWI1as+57/RXk2ieNtR0mNLeULd2qDasbnDKOcAN+I654GBivR9K17Ttaj3WdwrOBlom4demcj8QMjI962jNM+dxOArYfVq67r+tDSoooqjiCiiigAooooAKKKKACiiigAooooAKKKKACiiigAoork9d8dWOnKYrAx3tycjKt+7Tjgkj73UcD35FJtLc1o0KlaXLTVzqJ54baFpriWOKJfvPIwVR25JrhNZ+In34dIh9R9omH1GVX8iCfxFcfq2tX2t3AmvZt23OxFGFQE5wB/U88Dms+spVG9j38LlMIe9W1fbp/wSSeea5maa4lkllb7zyMWY9uSajorU0bw/qGuTbLSLEYzumkyI1I7E468jgc8+lZ7nrSnCnG8nZIy66TQvBmoayomkP2S14xJIh3OCMgqvGR05yBzxnFdvoXgzT9GYTSH7XdcYkkQbUIOQVXnB6c5J44xmukrWNPueHis4+zQ+/wD4H+Zl6N4f0/Q4dlpFmQ53TSYMjA9icdOBwOOPWtSiitUrHhznKcuaTuwooooJCiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAqjqmkWWsWrQXkKuMEK+Bvjz3U9ug+uOc1eooKjJxfNF2Z5drngO909WnsGa8gz9xVPmrknsPvY45Hr0Arka9/rB1zwlp2uM0zq0N2Rjz4++AQNw6Ht6HgDNZSp9j2sLm7Xu1/vPHqd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" style="width:40.0%" /><br />
+DescendMethods
+</center></h1>
+<h4 class="author">Luca Presicce, Alessandro Colombi</h4>
+
+
+
+<div id="contents-of-the-package" class="section level2">
+<h2>Contents of the package</h2>
+<p>In this package are included two principal functions:
+<code>GradD()</code> and <code>SteepD()</code>. These perform the
+algorithm of optimization called Gradient Descend and Steepest Descend,
+respectively. These functions are especially build to perform an
+optimization in order to find <span class="math inline">\(\beta\)</span>
+parameters of a liner model, i.e.  <span class="math display">\[
+Y=X\beta + \varepsilon
+\]</span></p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(DescendMethods)</span></code></pre></div>
+</div>
+<div id="question-1---implement-a-gradient-descend-function-optimization" class="section level2">
+<h2>Question 1 - Implement a gradient descend function optimization</h2>
+<p>In order to answer this question, we have implemented the function
+called <code>GradD()</code>. This take as input the following argument
+(that are full explained in the function documentation, callable with
+<code>?GradD</code>) :</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">GradD</span>(data,</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>      <span class="at">stepsize =</span> <span class="fl">1e-04</span>,</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>      <span class="at">init =</span> <span class="cn">NULL</span>,</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>      <span class="at">tol =</span> <span class="fl">1e-04</span>,</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>      <span class="at">maxit =</span> 1000L,</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">verb =</span> F,</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>      <span class="at">check_loss =</span> F)</span></code></pre></div>
+<dl>
+<dt>and returns a list of element composed by:</dt>
+<dd>
+<code>Beta_hat</code> that contains the <span class="math inline">\(\beta\)</span> coefficient of interest
+</dd>
+<dd>
+<code>Minimum</code> return the value of the loss function at the
+convergence point (only if <code>verb = TRUE</code>)
+</dd>
+<dd>
+<code>Final_error</code> return the value of the error at the
+convergence point
+</dd>
+<dd>
+<code>Num_iter</code> return the number of iterations that the function
+used to reach the minimum
+</dd>
+<dd>
+<code>Time</code> it is the time elapsed to perform the optimization
+(increased by 2 seconds to make it traceable even with small data)
+</dd>
+</dl>
+<p>We want to notice that, since the stopping criteria consider only the
+absolute variation on the <span class="math inline">\(\beta\)</span>
+coefficient and we think that it can be misleading in certain cases, we
+have introduced a boolean flag called <code>check_loss = T</code>. This
+option, if <code>TRUE</code>, allow to evaluate the absolute difference
+from the loss function, instead on the parameters.</p>
+</div>
+<div id="question-2---steepest-descend-method" class="section level2">
+<h2>Question 2 - Steepest descend method</h2>
+<p>In order to answer this question, we have implemented the function
+called <code>SteepD()</code>. This take as input the following argument
+(that are full explained in the function documentation, callable with
+<code>?SteepD</code>) :</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">SteepD</span>(data,</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>       <span class="at">init =</span> <span class="cn">NULL</span>,</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>       <span class="at">tol =</span> <span class="fl">1e-04</span>,</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>       <span class="at">maxit =</span> 1000L,</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">verb =</span> F,</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">check_loss =</span> F)</span></code></pre></div>
+<dl>
+<dt>and return a list of element composed by:</dt>
+<dd>
+<code>Beta_hat</code> that contains the <span class="math inline">\(\beta\)</span> coefficient of interest
+</dd>
+<dd>
+<code>Minimum</code> return the value of the loss function at the
+convergence point (only if <code>verb = TRUE</code>)
+</dd>
+<dd>
+<code>Final_error</code> return the value of the error at the
+convergence point
+</dd>
+<dd>
+<code>Num_iter</code> return the number of iterations that the function
+used to reach the minimum
+</dd>
+<dd>
+<code>Time</code> it is the time elapsed to perform the optimization
+(increased by 2 seconds to make it traceable even with small data)
+</dd>
+</dl>
+<p>We want to notice that, since the stopping criteria consider only the
+absolute variation on the <span class="math inline">\(\beta\)</span>
+coefficient and we think that it can be misleading in certain cases, we
+have introduced a boolean flag called <code>check_loss = T</code>. This
+option, if <code>TRUE</code>, allow to evaluate the absolute difference
+from the loss function, instead on the parameters.</p>
+</div>
+<div id="question-3---considerations" class="section level2">
+<h2>Question 3 - Considerations</h2>
+<p>In order to answer this question, we need to make some examples. We
+have chosen to use simulated datasets to compare the two functions,
+dividing the various examples based on the amount of data and
+dimensionality related to the problem.</p>
+<div id="low-dimensionality" class="section level3">
+<h3>Low dimensionality</h3>
+<p>Starting with small dataset</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>k <span class="ot">&lt;-</span> <span class="dv">2</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">100</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="dv">1</span>, <span class="fu">matrix</span>(<span class="fu">runif</span>(n<span class="sc">*</span>k), <span class="at">nrow =</span> n, <span class="at">ncol =</span> k))</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>beta <span class="ot">&lt;-</span> <span class="fu">runif</span>(k<span class="sc">+</span><span class="dv">1</span>, <span class="sc">-</span><span class="dv">10</span>, <span class="dv">10</span>)</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> x <span class="sc">%*%</span> beta <span class="sc">+</span> <span class="fu">rnorm</span>(n)</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">X =</span> x, <span class="at">Y =</span> y)</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>g <span class="ot">&lt;-</span> <span class="fu">GradD</span>(<span class="at">data =</span> df, <span class="at">verb =</span> F, <span class="at">maxit =</span> <span class="dv">3000</span>)</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>s <span class="ot">&lt;-</span> <span class="fu">SteepD</span>(<span class="at">data =</span> df, <span class="at">verb =</span> F)</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&#39;</span><span class="sc">\n</span><span class="st"> Estimated values - GradD </span><span class="sc">\n</span><span class="st">&#39;</span>)</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  Estimated values - GradD</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="fu">as.numeric</span>(<span class="fu">t</span>(g<span class="sc">$</span>Beta_hat))</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] -4.6385546 -5.5833095  0.1414084</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&#39;</span><span class="sc">\n</span><span class="st"> Estimated values - SteepD </span><span class="sc">\n</span><span class="st">&#39;</span>)</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  Estimated values - SteepD</span></span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a><span class="fu">as.numeric</span>(<span class="fu">t</span>(s<span class="sc">$</span>Beta_hat))</span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] -4.602707 -5.665278  0.157412</span></span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&#39;</span><span class="sc">\n</span><span class="st"> Real values </span><span class="sc">\n</span><span class="st">&#39;</span>)</span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  Real values</span></span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>beta</span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] -4.6498359 -5.6270943  0.3359367</span></span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&#39;</span><span class="sc">\n</span><span class="st"> Elapsed time - GradD </span><span class="sc">\n</span><span class="st">&#39;</span>)</span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  Elapsed time - GradD</span></span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a>g<span class="sc">$</span>Time</span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; elapsed </span></span>
+<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    0.11</span></span>
+<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&#39;</span><span class="sc">\n</span><span class="st"> Elapsed time - SteepD </span><span class="sc">\n</span><span class="st">&#39;</span>)</span>
+<span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  Elapsed time - SteepD</span></span>
+<span id="cb4-40"><a href="#cb4-40" aria-hidden="true" tabindex="-1"></a>s<span class="sc">$</span>Time</span>
+<span id="cb4-41"><a href="#cb4-41" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; elapsed </span></span>
+<span id="cb4-42"><a href="#cb4-42" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    0.02</span></span></code></pre></div>
+<p>Continuing with bigger dataset</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>k <span class="ot">&lt;-</span> <span class="dv">2</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">10</span><span class="sc">^</span><span class="dv">5</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="dv">1</span>, <span class="fu">matrix</span>(<span class="fu">runif</span>(n<span class="sc">*</span>k), <span class="at">nrow =</span> n, <span class="at">ncol =</span> k))</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>beta <span class="ot">&lt;-</span> <span class="fu">runif</span>(k<span class="sc">+</span><span class="dv">1</span>, <span class="sc">-</span><span class="dv">10</span>, <span class="dv">10</span>)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> x <span class="sc">%*%</span> beta <span class="sc">+</span> <span class="fu">rnorm</span>(n)</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">X =</span> x, <span class="at">Y =</span> y)</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>g <span class="ot">&lt;-</span> <span class="fu">GradD</span>(<span class="at">data =</span> df, <span class="at">verb =</span> F, <span class="at">stepsize =</span> <span class="fl">1e-06</span>, <span class="at">maxit =</span> <span class="dv">3000</span>)</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>s <span class="ot">&lt;-</span> <span class="fu">SteepD</span>(<span class="at">data =</span> df, <span class="at">verb =</span> F) </span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&#39;</span><span class="sc">\n</span><span class="st"> Estimated values - GradD </span><span class="sc">\n</span><span class="st">&#39;</span>)</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  Estimated values - GradD</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="fu">as.numeric</span>(<span class="fu">t</span>(g<span class="sc">$</span>Beta_hat))</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 5.7048176 0.5132577 3.0652641</span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&#39;</span><span class="sc">\n</span><span class="st"> Estimated values - SteepD </span><span class="sc">\n</span><span class="st">&#39;</span>)</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  Estimated values - SteepD</span></span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a><span class="fu">as.numeric</span>(<span class="fu">t</span>(s<span class="sc">$</span>Beta_hat))</span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 5.7127866 0.5051601 3.0582796</span></span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&#39;</span><span class="sc">\n</span><span class="st"> Real values </span><span class="sc">\n</span><span class="st">&#39;</span>)</span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  Real values</span></span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>beta</span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 5.713136 0.508544 3.050659</span></span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&#39;</span><span class="sc">\n</span><span class="st"> Elapsed time - GradD </span><span class="sc">\n</span><span class="st">&#39;</span>)</span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  Elapsed time - GradD</span></span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a>g<span class="sc">$</span>Time</span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; elapsed </span></span>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    4.81</span></span>
+<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&#39;</span><span class="sc">\n</span><span class="st"> Elapsed time - SteepD </span><span class="sc">\n</span><span class="st">&#39;</span>)</span>
+<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  Elapsed time - SteepD</span></span>
+<span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a>s<span class="sc">$</span>Time</span>
+<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; elapsed </span></span>
+<span id="cb5-42"><a href="#cb5-42" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     0.6</span></span></code></pre></div>
+</div>
+<div id="high-dimensionality" class="section level3">
+<h3>High dimensionality</h3>
+<p>Starting with small dataset</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>k <span class="ot">&lt;-</span> <span class="dv">25</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">100</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="dv">1</span>, <span class="fu">matrix</span>(<span class="fu">runif</span>(n<span class="sc">*</span>k), <span class="at">nrow =</span> n, <span class="at">ncol =</span> k))</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>beta <span class="ot">&lt;-</span> <span class="fu">runif</span>(k<span class="sc">+</span><span class="dv">1</span>, <span class="sc">-</span><span class="dv">10</span>, <span class="dv">10</span>)</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> x <span class="sc">%*%</span> beta <span class="sc">+</span> <span class="fu">rnorm</span>(n)</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">X =</span> x, <span class="at">Y =</span> y)</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>g <span class="ot">&lt;-</span> <span class="fu">GradD</span>(<span class="at">data =</span> df, <span class="at">verb =</span> F, <span class="at">stepsize =</span> <span class="fl">1e-03</span>, <span class="at">maxit =</span> <span class="dv">3000</span>)</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>s <span class="ot">&lt;-</span> <span class="fu">SteepD</span>(<span class="at">data =</span> df, <span class="at">verb =</span> F)</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&#39;</span><span class="sc">\n</span><span class="st"> Estimated values - GradD </span><span class="sc">\n</span><span class="st">&#39;</span>)</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  Estimated values - GradD</span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="fu">as.numeric</span>(<span class="fu">t</span>(g<span class="sc">$</span>Beta_hat))</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [1] -0.3288529 -8.3441081  7.0261624 -1.4838860  9.6419996 -0.6030761</span></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [7]  8.8597166 -9.6935564 -6.2400055 -2.0287206 -2.9326111  0.7111599</span></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [13]  4.1266803  8.8772256  0.7148837 -7.8966180  2.7020355 10.0329082</span></span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [19] -7.8592152  7.8108428 -3.5626556 -0.5698904 -6.4782692 -3.7902323</span></span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [25] -6.6761330  3.6217660</span></span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&#39;</span><span class="sc">\n</span><span class="st"> Estimated values - SteepD </span><span class="sc">\n</span><span class="st">&#39;</span>)</span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  Estimated values - SteepD</span></span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a><span class="fu">as.numeric</span>(<span class="fu">t</span>(s<span class="sc">$</span>Beta_hat))</span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [1] -0.3266047 -8.3456277  7.0265912 -1.4837391  9.6422207 -0.6030955</span></span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [7]  8.8586883 -9.6947307 -6.2398555 -2.0289655 -2.9345663  0.7103304</span></span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [13]  4.1269086  8.8778646  0.7131707 -7.8966724  2.7013200 10.0334117</span></span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [19] -7.8593659  7.8124910 -3.5626985 -0.5698199 -6.4780514 -3.7874863</span></span>
+<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [25] -6.6780811  3.6218325</span></span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&#39;</span><span class="sc">\n</span><span class="st"> Real values </span><span class="sc">\n</span><span class="st">&#39;</span>)</span>
+<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  Real values</span></span>
+<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a>beta</span>
+<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [1]  0.52038125 -8.53329150  6.99483504 -1.53883982  9.76192146 -0.42251742</span></span>
+<span id="cb6-37"><a href="#cb6-37" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [7]  8.11388011 -9.62988138 -6.15712356 -2.31385959 -3.85127152  0.56582507</span></span>
+<span id="cb6-38"><a href="#cb6-38" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [13]  4.56451363  9.07113069 -0.08011746 -7.35965506  2.16937511  9.83737159</span></span>
+<span id="cb6-39"><a href="#cb6-39" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [19] -8.10580664  7.90566914 -3.30278205 -0.55643068 -6.45764060 -2.96689943</span></span>
+<span id="cb6-40"><a href="#cb6-40" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [25] -6.46881769  3.06091556</span></span>
+<span id="cb6-41"><a href="#cb6-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-42"><a href="#cb6-42" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&#39;</span><span class="sc">\n</span><span class="st"> Elapsed time - GradD </span><span class="sc">\n</span><span class="st">&#39;</span>)</span>
+<span id="cb6-43"><a href="#cb6-43" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb6-44"><a href="#cb6-44" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  Elapsed time - GradD</span></span>
+<span id="cb6-45"><a href="#cb6-45" aria-hidden="true" tabindex="-1"></a>g<span class="sc">$</span>Time</span>
+<span id="cb6-46"><a href="#cb6-46" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; elapsed </span></span>
+<span id="cb6-47"><a href="#cb6-47" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    0.09</span></span>
+<span id="cb6-48"><a href="#cb6-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-49"><a href="#cb6-49" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&#39;</span><span class="sc">\n</span><span class="st"> Elapsed time - SteepD </span><span class="sc">\n</span><span class="st">&#39;</span>)</span>
+<span id="cb6-50"><a href="#cb6-50" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb6-51"><a href="#cb6-51" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  Elapsed time - SteepD</span></span>
+<span id="cb6-52"><a href="#cb6-52" aria-hidden="true" tabindex="-1"></a>s<span class="sc">$</span>Time</span>
+<span id="cb6-53"><a href="#cb6-53" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; elapsed </span></span>
+<span id="cb6-54"><a href="#cb6-54" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    0.01</span></span></code></pre></div>
+<p>Continuing with bigger dataset</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>k <span class="ot">&lt;-</span> <span class="dv">25</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">10</span><span class="sc">^</span><span class="dv">5</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="dv">1</span>, <span class="fu">matrix</span>(<span class="fu">runif</span>(n<span class="sc">*</span>k), <span class="at">nrow =</span> n, <span class="at">ncol =</span> k))</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>beta <span class="ot">&lt;-</span> <span class="fu">runif</span>(k<span class="sc">+</span><span class="dv">1</span>, <span class="sc">-</span><span class="dv">10</span>, <span class="dv">10</span>)</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> x <span class="sc">%*%</span> beta <span class="sc">+</span> <span class="fu">rnorm</span>(n)</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">X =</span> x, <span class="at">Y =</span> y)</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>g <span class="ot">&lt;-</span> <span class="fu">GradD</span>(<span class="at">data =</span> df, <span class="at">verb =</span> F, <span class="at">stepsize =</span> <span class="fl">1e-06</span>, <span class="at">maxit =</span> <span class="dv">3000</span>)</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>s <span class="ot">&lt;-</span> <span class="fu">SteepD</span>(<span class="at">data =</span> df, <span class="at">verb =</span> F) </span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&#39;</span><span class="sc">\n</span><span class="st"> Estimated values - GradD </span><span class="sc">\n</span><span class="st">&#39;</span>)</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  Estimated values - GradD</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a><span class="fu">as.numeric</span>(<span class="fu">t</span>(g<span class="sc">$</span>Beta_hat))</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [1]  9.28509303  1.18099613 -4.06524509 -2.90668042 -6.92173850 -4.59865887</span></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [7] -8.84243643  4.07428879 -9.15343394  3.02448545  2.74482132 -5.00874515</span></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [13] -2.00597498  5.13939460 -0.45342840 -0.07810237 -0.37732790 -8.15277175</span></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [19] -1.82694760  0.94288301  1.81079964  3.05892272 -9.80727344 -2.90172352</span></span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [25]  2.60117769 -8.90560084</span></span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&#39;</span><span class="sc">\n</span><span class="st"> Estimated values - SteepD </span><span class="sc">\n</span><span class="st">&#39;</span>)</span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  Estimated values - SteepD</span></span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a><span class="fu">as.numeric</span>(<span class="fu">t</span>(s<span class="sc">$</span>Beta_hat))</span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [1]  9.18750384  1.18862047 -4.05736554 -2.89883530 -6.91394768 -4.59102348</span></span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [7] -8.83455137  4.08217402 -9.14565277  3.03262277  2.75263357 -5.00084057</span></span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [13] -1.99828635  5.14742603 -0.44540227 -0.06998976 -0.36965857 -8.14496908</span></span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [19] -1.81947659  0.95071789  1.81843334  3.06678306 -9.79970911 -2.89401056</span></span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [25]  2.60910181 -8.89793204</span></span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&#39;</span><span class="sc">\n</span><span class="st"> Real values </span><span class="sc">\n</span><span class="st">&#39;</span>)</span>
+<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  Real values</span></span>
+<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a>beta</span>
+<span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [1]  9.28873189  1.17226455 -4.07013365 -2.91575543 -6.91337367 -4.58615109</span></span>
+<span id="cb7-37"><a href="#cb7-37" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [7] -8.82251249  4.07843447 -9.15499816  3.02634660  2.74251579 -5.01836949</span></span>
+<span id="cb7-38"><a href="#cb7-38" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [13] -2.00619861  5.11539147 -0.44083503 -0.07458638 -0.37548556 -8.15626769</span></span>
+<span id="cb7-39"><a href="#cb7-39" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [19] -1.82830078  0.94578507  1.79774852  3.06634196 -9.81651745 -2.89185171</span></span>
+<span id="cb7-40"><a href="#cb7-40" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [25]  2.60048847 -8.90797743</span></span>
+<span id="cb7-41"><a href="#cb7-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-42"><a href="#cb7-42" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&#39;</span><span class="sc">\n</span><span class="st"> Elapsed time - GradD </span><span class="sc">\n</span><span class="st">&#39;</span>)</span>
+<span id="cb7-43"><a href="#cb7-43" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-44"><a href="#cb7-44" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  Elapsed time - GradD</span></span>
+<span id="cb7-45"><a href="#cb7-45" aria-hidden="true" tabindex="-1"></a>g<span class="sc">$</span>Time</span>
+<span id="cb7-46"><a href="#cb7-46" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; elapsed </span></span>
+<span id="cb7-47"><a href="#cb7-47" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  296.88</span></span>
+<span id="cb7-48"><a href="#cb7-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-49"><a href="#cb7-49" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&#39;</span><span class="sc">\n</span><span class="st"> Elapsed time - SteepD </span><span class="sc">\n</span><span class="st">&#39;</span>)</span>
+<span id="cb7-50"><a href="#cb7-50" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb7-51"><a href="#cb7-51" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  Elapsed time - SteepD</span></span>
+<span id="cb7-52"><a href="#cb7-52" aria-hidden="true" tabindex="-1"></a>s<span class="sc">$</span>Time</span>
+<span id="cb7-53"><a href="#cb7-53" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; elapsed </span></span>
+<span id="cb7-54"><a href="#cb7-54" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   36.13</span></span></code></pre></div>
+<p>From this examples, it’s easy to see that the function which
+implements steepest descend method, <code>SteepD()</code>, is faster
+than the other one that implements the gradient descend method,
+<code>GradD()</code>, under all points of view.</p>
+<p>An important disadvantage of <code>GradD()</code>, respect to
+<code>SteepD()</code>, is its dependence from <code>stepsize</code>
+argument, with respect to it is very sensitive. On the contrary, this
+problem not affects <code>SteepD()</code>.</p>
+<p>Then, not only the results provided by <code>SteepD()</code> are
+faster, but they are also more robusts, since they do not depend from
+another argument (the <code>stepsize</code>) which affects the
+optimization algorithm critically in the case of
+<code>GradD()</code>.</p>
+</div>
+</div>
+<div id="question-4---parallel-cross-validation" class="section level2">
+<h2>Question 4 - Parallel cross-validation</h2>
+<p>The package also provides two functions that perform a cross
+validation on predictive capability for a linear model, achieved by a
+set of parameters obtained throught an optimization process. They are
+<code>CrossVD()</code> and <code>PcrossVD()</code>, and they were
+written following two different flow of operation: sequential and
+parallel respectively.</p>
+<p>The call for the sequential version is the following one:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">CrossVD</span>(data, </span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>        <span class="at">K =</span> <span class="cn">NULL</span>, </span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>        <span class="at">get_mean =</span> T,</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>        <span class="at">verb =</span> F,</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>        OPT, ...)</span></code></pre></div>
+<p>As usual, all the arguments are all explained in the function
+documentation. We here just report that the idea is to build a function
+that takes the name of the optimization function to be used as an
+argument. At the moment, <code>OPT</code> accepts only
+<code>GradD</code> and <code>SteepD</code>. Moreover, if
+<code>get_mean</code> is <code>TRUE</code>, the CV-MSE is returned.
+Otherwise the function returns a vector containing all MSE computed for
+each fold.</p>
+<p>The call for the parallel version is the following one:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">PcrossVD</span>(data, </span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>        <span class="at">K =</span> <span class="cn">NULL</span>, </span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>        <span class="at">get_mean =</span> T,</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>        <span class="at">n_clust =</span> <span class="cn">NULL</span>,</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>        OPT, ...)</span></code></pre></div>
+<p>The only difference with respect to the previous one is the
+additional argument to get the number of cores/clusters the user want to
+use. In both functions, we rely on the map-reduce paradigm. In the
+parallel version, only the map transformation has been parallelized.</p>
+<!-- We encounterd a problem for the parallel version, -->
+<!-- indeed, running with `OPT = SteepD` we get an error message -->
+<!-- ```{r, eval = FALSE} -->
+<!--  Error in checkForRemoteErrors(val) :  -->
+<!--   7 nodes produced errors; first error: oggetto "SteepD" non trovato  -->
+<!-- ``` -->
+<!-- Apparently, the problem has been solved by calling the OPT function at least once before the parallelization. Namely,  -->
+<!-- ```{r, eval=FALSE} -->
+<!-- OPT(df, maxit=1) -->
+<!-- ## 1 - define the cluster -->
+<!-- cluster <- makeCluster(n_clust, type = "SOCK") -->
+<!-- registerDoSNOW(cluster) -->
+<!-- ``` -->
+<!-- We are aware that this is not an elegant solution and it would be nice to understand what is happening to solve the problem. -->
+</div>
+<div id="examples" class="section level2">
+<h2>Examples</h2>
+<p>Below are some code chunks as examples, in which the functions are
+implemented.</p>
+<div id="simulated-data" class="section level3">
+<h3>Simulated data:</h3>
+<p>First of all, we test the functions on simulated data in a low
+dimension scenario.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">100</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>k <span class="ot">&lt;-</span> <span class="dv">4</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="dv">1</span>, <span class="fu">matrix</span>(<span class="fu">runif</span>(n<span class="sc">*</span>(k<span class="dv">-1</span>), <span class="dv">0</span>, <span class="dv">10</span>), <span class="at">nrow =</span> n, <span class="at">ncol =</span> (k<span class="dv">-1</span>)))</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>beta <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(k, <span class="dv">5</span>, <span class="dv">5</span>)</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> x <span class="sc">%*%</span> beta <span class="sc">+</span> <span class="fu">rnorm</span>(n)</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">X =</span> x, <span class="at">Y =</span> y)</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>res_D   <span class="ot">&lt;-</span> <span class="fu">GradD</span>(<span class="at">data =</span> df, <span class="at">verb =</span> F, <span class="at">maxit =</span> <span class="dv">3000</span>)</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>res_SD  <span class="ot">&lt;-</span> <span class="fu">SteepD</span>(<span class="at">data =</span> df, <span class="at">verb =</span> F) </span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>res_D_loss   <span class="ot">&lt;-</span> <span class="fu">GradD</span>(<span class="at">data =</span> df, <span class="at">verb =</span> F, <span class="at">check_loss =</span> T , <span class="at">maxit =</span> <span class="dv">3000</span>)</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>res_SD_loss  <span class="ot">&lt;-</span> <span class="fu">SteepD</span>(<span class="at">data =</span> df, <span class="at">verb =</span> F,  <span class="at">check_loss =</span> T ) </span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>res_opt <span class="ot">&lt;-</span> <span class="fu">optim</span>(<span class="at">par =</span> <span class="fu">rep</span>(<span class="dv">1</span>, <span class="dv">4</span>), <span class="at">fn =</span> LossD, <span class="at">X =</span> x, <span class="at">Y =</span> y, <span class="at">method =</span> <span class="fu">c</span>(<span class="st">&quot;CG&quot;</span>))</span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&#39;</span><span class="sc">\n</span><span class="st"> Estimated values - GradD </span><span class="sc">\n</span><span class="st">&#39;</span>)</span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  Estimated values - GradD</span></span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a><span class="fu">t</span>(res_D<span class="sc">$</span>Beta_hat)</span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;         [,1]     [,2]     [,3]      [,4]</span></span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1,] 6.99321 4.961984 3.399895 0.3653199</span></span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&#39;</span><span class="sc">\n</span><span class="st"> Estimated values - SteepD </span><span class="sc">\n</span><span class="st">&#39;</span>)</span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  Estimated values - SteepD</span></span>
+<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a><span class="fu">t</span>(res_D<span class="sc">$</span>Beta_hat)</span>
+<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;         [,1]     [,2]     [,3]      [,4]</span></span>
+<span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1,] 6.99321 4.961984 3.399895 0.3653199</span></span>
+<span id="cb10-28"><a href="#cb10-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-29"><a href="#cb10-29" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&#39;</span><span class="sc">\n</span><span class="st"> Estimated values - GradD - loss </span><span class="sc">\n</span><span class="st">&#39;</span>)</span>
+<span id="cb10-30"><a href="#cb10-30" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb10-31"><a href="#cb10-31" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  Estimated values - GradD - loss</span></span>
+<span id="cb10-32"><a href="#cb10-32" aria-hidden="true" tabindex="-1"></a><span class="fu">t</span>(res_D<span class="sc">$</span>Beta_hat)</span>
+<span id="cb10-33"><a href="#cb10-33" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;         [,1]     [,2]     [,3]      [,4]</span></span>
+<span id="cb10-34"><a href="#cb10-34" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1,] 6.99321 4.961984 3.399895 0.3653199</span></span>
+<span id="cb10-35"><a href="#cb10-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-36"><a href="#cb10-36" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&#39;</span><span class="sc">\n</span><span class="st"> Estimated values - SteepD - loss </span><span class="sc">\n</span><span class="st">&#39;</span>)</span>
+<span id="cb10-37"><a href="#cb10-37" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb10-38"><a href="#cb10-38" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  Estimated values - SteepD - loss</span></span>
+<span id="cb10-39"><a href="#cb10-39" aria-hidden="true" tabindex="-1"></a><span class="fu">t</span>(res_D<span class="sc">$</span>Beta_hat)</span>
+<span id="cb10-40"><a href="#cb10-40" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;         [,1]     [,2]     [,3]      [,4]</span></span>
+<span id="cb10-41"><a href="#cb10-41" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1,] 6.99321 4.961984 3.399895 0.3653199</span></span>
+<span id="cb10-42"><a href="#cb10-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-43"><a href="#cb10-43" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&#39;</span><span class="sc">\n</span><span class="st"> Estimated values - optim </span><span class="sc">\n</span><span class="st">&#39;</span>)</span>
+<span id="cb10-44"><a href="#cb10-44" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb10-45"><a href="#cb10-45" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  Estimated values - optim</span></span>
+<span id="cb10-46"><a href="#cb10-46" aria-hidden="true" tabindex="-1"></a><span class="fu">t</span>(res_opt<span class="sc">$</span>par)</span>
+<span id="cb10-47"><a href="#cb10-47" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;          [,1]     [,2]     [,3]      [,4]</span></span>
+<span id="cb10-48"><a href="#cb10-48" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1,] 6.737981 4.978899 3.416641 0.3760729</span></span>
+<span id="cb10-49"><a href="#cb10-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-50"><a href="#cb10-50" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&#39;</span><span class="sc">\n</span><span class="st"> Real values </span><span class="sc">\n</span><span class="st">&#39;</span>)</span>
+<span id="cb10-51"><a href="#cb10-51" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb10-52"><a href="#cb10-52" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  Real values</span></span>
+<span id="cb10-53"><a href="#cb10-53" aria-hidden="true" tabindex="-1"></a>beta</span>
+<span id="cb10-54"><a href="#cb10-54" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 7.2509355 4.9072008 3.4096581 0.3531893</span></span></code></pre></div>
+<p>Both stopping criteria arrive to the same results.</p>
+</div>
+<div id="real-data" class="section level3">
+<h3>Real data</h3>
+<p>The next experiment is done using real data. First of all, we fit a
+simple linear regression without the intercept.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(trees<span class="sc">$</span>Height)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> trees<span class="sc">$</span>Girth</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">X =</span> x, <span class="at">Y =</span> y)</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>res_D   <span class="ot">&lt;-</span> <span class="fu">GradD</span>(<span class="at">data =</span> df, <span class="at">verb =</span> F, <span class="at">stepsize =</span> <span class="fl">1e-8</span> ,<span class="at">maxit =</span> <span class="dv">3000</span>)</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>res_SD  <span class="ot">&lt;-</span> <span class="fu">SteepD</span>(<span class="at">data =</span> df, <span class="at">verb =</span> F) </span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>res_D_loss   <span class="ot">&lt;-</span> <span class="fu">GradD</span>(<span class="at">data =</span> df, <span class="at">verb =</span> F, <span class="at">stepsize =</span> <span class="fl">1e-8</span>, <span class="at">check_loss =</span> T , <span class="at">maxit =</span> <span class="dv">3000</span>)</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>res_SD_loss  <span class="ot">&lt;-</span> <span class="fu">SteepD</span>(<span class="at">data =</span> df, <span class="at">verb =</span> F,  <span class="at">check_loss =</span> T ) </span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>res_opt <span class="ot">&lt;-</span> <span class="fu">optim</span>(<span class="at">par =</span> <span class="fu">rep</span>(<span class="dv">1</span>, <span class="fu">ncol</span>(x)), <span class="at">fn =</span> LossD, <span class="at">X =</span> x, <span class="at">Y =</span> y, <span class="at">method =</span> <span class="fu">c</span>(<span class="st">&quot;BFGS&quot;</span>))</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>res_lm  <span class="ot">&lt;-</span> <span class="fu">lm</span>(Girth <span class="sc">~</span> Height <span class="sc">-</span> <span class="dv">1</span>, <span class="at">data =</span> trees)</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&#39;</span><span class="sc">\n</span><span class="st"> Estimated values - GradD </span><span class="sc">\n</span><span class="st">&#39;</span>)</span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  Estimated values - GradD</span></span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a><span class="fu">t</span>(res_D<span class="sc">$</span>Beta_hat)</span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;           [,1]</span></span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1,] 0.2024389</span></span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&#39;</span><span class="sc">\n</span><span class="st"> Estimated values - SteepD </span><span class="sc">\n</span><span class="st">&#39;</span>)</span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  Estimated values - SteepD</span></span>
+<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a><span class="fu">t</span>(res_D<span class="sc">$</span>Beta_hat)</span>
+<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;           [,1]</span></span>
+<span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1,] 0.2024389</span></span>
+<span id="cb11-26"><a href="#cb11-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-27"><a href="#cb11-27" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&#39;</span><span class="sc">\n</span><span class="st"> Estimated values - GradD - loss </span><span class="sc">\n</span><span class="st">&#39;</span>)</span>
+<span id="cb11-28"><a href="#cb11-28" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb11-29"><a href="#cb11-29" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  Estimated values - GradD - loss</span></span>
+<span id="cb11-30"><a href="#cb11-30" aria-hidden="true" tabindex="-1"></a><span class="fu">t</span>(res_D<span class="sc">$</span>Beta_hat)</span>
+<span id="cb11-31"><a href="#cb11-31" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;           [,1]</span></span>
+<span id="cb11-32"><a href="#cb11-32" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1,] 0.2024389</span></span>
+<span id="cb11-33"><a href="#cb11-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-34"><a href="#cb11-34" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&#39;</span><span class="sc">\n</span><span class="st"> Estimated values - SteepD - loss </span><span class="sc">\n</span><span class="st">&#39;</span>)</span>
+<span id="cb11-35"><a href="#cb11-35" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb11-36"><a href="#cb11-36" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  Estimated values - SteepD - loss</span></span>
+<span id="cb11-37"><a href="#cb11-37" aria-hidden="true" tabindex="-1"></a><span class="fu">t</span>(res_D<span class="sc">$</span>Beta_hat)</span>
+<span id="cb11-38"><a href="#cb11-38" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;           [,1]</span></span>
+<span id="cb11-39"><a href="#cb11-39" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1,] 0.2024389</span></span>
+<span id="cb11-40"><a href="#cb11-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-41"><a href="#cb11-41" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&#39;</span><span class="sc">\n</span><span class="st"> Estimated values - optim </span><span class="sc">\n</span><span class="st">&#39;</span>)</span>
+<span id="cb11-42"><a href="#cb11-42" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb11-43"><a href="#cb11-43" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  Estimated values - optim</span></span>
+<span id="cb11-44"><a href="#cb11-44" aria-hidden="true" tabindex="-1"></a><span class="fu">t</span>(res_opt<span class="sc">$</span>par)</span>
+<span id="cb11-45"><a href="#cb11-45" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;          [,1]</span></span>
+<span id="cb11-46"><a href="#cb11-46" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1,] 0.174871</span></span>
+<span id="cb11-47"><a href="#cb11-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-48"><a href="#cb11-48" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&#39;</span><span class="sc">\n</span><span class="st"> Estimated values - lm </span><span class="sc">\n</span><span class="st">&#39;</span>)</span>
+<span id="cb11-49"><a href="#cb11-49" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb11-50"><a href="#cb11-50" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  Estimated values - lm</span></span>
+<span id="cb11-51"><a href="#cb11-51" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(res_lm)</span>
+<span id="cb11-52"><a href="#cb11-52" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   Height </span></span>
+<span id="cb11-53"><a href="#cb11-53" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 0.174871</span></span></code></pre></div>
+<p>We noticed that <code>GradD</code> is sensible to the choice of the
+stepsize. Indeed, if it is not small enough, it is even possible that
+the errors explode to <span class="math inline">\(+\infty\)</span>.</p>
+<p>Then, we also introduced the intercept.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="dv">1</span>,<span class="fu">as.matrix</span>(trees[, <span class="sc">-</span><span class="dv">1</span>]))</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> trees<span class="sc">$</span>Girth</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">X =</span> x, <span class="at">Y =</span> y)</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>res_D   <span class="ot">&lt;-</span> <span class="fu">GradD</span>(<span class="at">data =</span> df, <span class="at">verb =</span> F, <span class="at">stepsize =</span> <span class="fl">1e-8</span> ,<span class="at">maxit =</span> <span class="dv">3000</span>)</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>res_SD  <span class="ot">&lt;-</span> <span class="fu">SteepD</span>(<span class="at">data =</span> df, <span class="at">verb =</span> F) </span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>res_D_loss   <span class="ot">&lt;-</span> <span class="fu">GradD</span>(<span class="at">data =</span> df, <span class="at">verb =</span> F, <span class="at">stepsize =</span> <span class="fl">1e-8</span>, <span class="at">check_loss =</span> T , <span class="at">maxit =</span> <span class="dv">3000</span>)</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>res_SD_loss  <span class="ot">&lt;-</span> <span class="fu">SteepD</span>(<span class="at">data =</span> df, <span class="at">verb =</span> F,  <span class="at">check_loss =</span> T ) </span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>res_opt <span class="ot">&lt;-</span> <span class="fu">optim</span>(<span class="at">par =</span> <span class="fu">rep</span>(<span class="dv">1</span>, <span class="fu">ncol</span>(x)), <span class="at">fn =</span> LossD, <span class="at">X =</span> x, <span class="at">Y =</span> y, <span class="at">method =</span> <span class="fu">c</span>(<span class="st">&quot;BFGS&quot;</span>))</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>res_lm  <span class="ot">&lt;-</span> <span class="fu">lm</span>(Girth <span class="sc">~</span> ., <span class="at">data =</span> trees)</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&#39;</span><span class="sc">\n</span><span class="st"> Estimated values - GradD </span><span class="sc">\n</span><span class="st">&#39;</span>)</span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  Estimated values - GradD</span></span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a><span class="fu">t</span>(res_D<span class="sc">$</span>Beta_hat)</span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;                     Height    Volume</span></span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1,] 0.9867941 -0.02428699 0.5283823</span></span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&#39;</span><span class="sc">\n</span><span class="st"> Estimated values - SteepD </span><span class="sc">\n</span><span class="st">&#39;</span>)</span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  Estimated values - SteepD</span></span>
+<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a><span class="fu">t</span>(res_D<span class="sc">$</span>Beta_hat)</span>
+<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;                     Height    Volume</span></span>
+<span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1,] 0.9867941 -0.02428699 0.5283823</span></span>
+<span id="cb12-26"><a href="#cb12-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-27"><a href="#cb12-27" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&#39;</span><span class="sc">\n</span><span class="st"> Estimated values - GradD - loss </span><span class="sc">\n</span><span class="st">&#39;</span>)</span>
+<span id="cb12-28"><a href="#cb12-28" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb12-29"><a href="#cb12-29" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  Estimated values - GradD - loss</span></span>
+<span id="cb12-30"><a href="#cb12-30" aria-hidden="true" tabindex="-1"></a><span class="fu">t</span>(res_D<span class="sc">$</span>Beta_hat)</span>
+<span id="cb12-31"><a href="#cb12-31" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;                     Height    Volume</span></span>
+<span id="cb12-32"><a href="#cb12-32" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1,] 0.9867941 -0.02428699 0.5283823</span></span>
+<span id="cb12-33"><a href="#cb12-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-34"><a href="#cb12-34" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&#39;</span><span class="sc">\n</span><span class="st"> Estimated values - SteepD - loss </span><span class="sc">\n</span><span class="st">&#39;</span>)</span>
+<span id="cb12-35"><a href="#cb12-35" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb12-36"><a href="#cb12-36" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  Estimated values - SteepD - loss</span></span>
+<span id="cb12-37"><a href="#cb12-37" aria-hidden="true" tabindex="-1"></a><span class="fu">t</span>(res_D<span class="sc">$</span>Beta_hat)</span>
+<span id="cb12-38"><a href="#cb12-38" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;                     Height    Volume</span></span>
+<span id="cb12-39"><a href="#cb12-39" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1,] 0.9867941 -0.02428699 0.5283823</span></span>
+<span id="cb12-40"><a href="#cb12-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-41"><a href="#cb12-41" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&#39;</span><span class="sc">\n</span><span class="st"> Estimated values - optim </span><span class="sc">\n</span><span class="st">&#39;</span>)</span>
+<span id="cb12-42"><a href="#cb12-42" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb12-43"><a href="#cb12-43" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  Estimated values - optim</span></span>
+<span id="cb12-44"><a href="#cb12-44" aria-hidden="true" tabindex="-1"></a><span class="fu">t</span>(res_opt<span class="sc">$</span>par)</span>
+<span id="cb12-45"><a href="#cb12-45" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;          [,1]        [,2]      [,3]</span></span>
+<span id="cb12-46"><a href="#cb12-46" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1,] 10.81637 -0.04548349 0.1951797</span></span>
+<span id="cb12-47"><a href="#cb12-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-48"><a href="#cb12-48" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&#39;</span><span class="sc">\n</span><span class="st"> Estimated values - lm </span><span class="sc">\n</span><span class="st">&#39;</span>)</span>
+<span id="cb12-49"><a href="#cb12-49" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb12-50"><a href="#cb12-50" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  Estimated values - lm</span></span>
+<span id="cb12-51"><a href="#cb12-51" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(res_lm)</span>
+<span id="cb12-52"><a href="#cb12-52" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; (Intercept)      Height      Volume </span></span>
+<span id="cb12-53"><a href="#cb12-53" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 10.81637050 -0.04548349  0.19517975</span></span></code></pre></div>
+</div>
+<div id="benchmark-on-simulated-data" class="section level3">
+<h3>Benchmark on simulated data</h3>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(microbenchmark)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">445</span>)</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">100</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>k <span class="ot">&lt;-</span> <span class="dv">5</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="dv">1</span>, <span class="fu">matrix</span>(<span class="fu">runif</span>(n<span class="sc">*</span>(k<span class="dv">-1</span>), <span class="dv">0</span>, <span class="dv">10</span>), <span class="at">nrow =</span> n, <span class="at">ncol =</span> (k<span class="dv">-1</span>)))</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>beta_true <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="at">n =</span> k)</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> X <span class="sc">%*%</span> beta_true <span class="sc">+</span> <span class="fu">rnorm</span>(n)</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">X =</span> X, <span class="at">Y =</span> y)</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a><span class="fu">microbenchmark</span>(</span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">BFGS =</span> <span class="fu">optim</span>(<span class="at">par =</span> <span class="fu">rep</span>(<span class="dv">1</span>, k), <span class="at">fn =</span> LossD, <span class="at">X =</span> X, <span class="at">Y =</span> y, <span class="at">method =</span> <span class="fu">c</span>(<span class="st">&quot;BFGS&quot;</span>)),</span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">CG =</span> <span class="fu">optim</span>(<span class="at">par =</span> <span class="fu">rep</span>(<span class="dv">1</span>, k), <span class="at">fn =</span> LossD, <span class="at">X =</span> X, <span class="at">Y =</span> y, <span class="at">method =</span> <span class="fu">c</span>(<span class="st">&quot;CG&quot;</span>)),</span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">SteepD =</span> <span class="fu">SteepD</span>(<span class="at">data =</span> df),</span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">Gradd =</span> <span class="fu">GradD</span>(<span class="at">data =</span> df)</span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unit: microseconds</span></span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    expr     min       lq      mean   median       uq     max neval  cld</span></span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    BFGS   786.7   830.70   971.819   865.70   927.30  4885.8   100 a   </span></span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;      CG  6913.5  7247.15  7945.509  7486.00  8259.95 13529.1   100   c </span></span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  SteepD  2414.8  2549.50  2878.113  2696.25  3018.50  4840.6   100  b  </span></span>
+<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   Gradd 17713.9 18546.05 20697.545 19750.15 21793.40 31187.7   100    d</span></span></code></pre></div>
+</div>
+</div>
+<div id="prediction" class="section level2">
+<h2>Prediction</h2>
+<p>The package also provides specific functions for prediction in linear
+models. <code>PredictD</code> gets as input the estimated coefficients
+and the new covariates and returns the pointwise estimation. To emulate
+the usage of the well know <code>stats::predict</code> function, the new
+data to be predicted must be a data.frame. However, none check is done
+on the order of the variables. Hence, the user is supposed to use the
+same ordering of the variables that is given by the vector of the
+estimated coefficients. <code>MseD</code> gets the estimated
+coefficients and the data and it return the Mean Squared error.</p>
+<div id="cross-validation" class="section level3">
+<h3>Cross Validation</h3>
+<p>Usage example for leave-one-out cross validation.</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">445</span>)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">1000</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>x1 <span class="ot">&lt;-</span> <span class="fu">runif</span>(n)</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>x2 <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n)</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>x3 <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n)</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>x4 <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n)</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="dv">1</span><span class="fl">+3.6</span><span class="sc">*</span>x1 <span class="sc">+</span> <span class="fl">5.3</span><span class="sc">*</span>x2 <span class="sc">+</span> <span class="fl">4.2</span><span class="sc">*</span>x3 <span class="sc">+</span> <span class="fl">2.1</span><span class="sc">*</span>x4 <span class="sc">+</span> <span class="fu">rnorm</span>(n)</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="dv">1</span>, x1, x2, x3, x4)</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">X =</span> x, <span class="at">Y =</span> y)</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>tictoc<span class="sc">::</span><span class="fu">tic</span>()</span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>DescendMethods<span class="sc">::</span><span class="fu">CrossVD</span>(<span class="at">data =</span> df, <span class="at">OPT =</span> SteepD)</span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 0.964588</span></span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>tictoc<span class="sc">::</span><span class="fu">toc</span>()</span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 5.02 sec elapsed</span></span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>tictoc<span class="sc">::</span><span class="fu">tic</span>()</span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>DescendMethods<span class="sc">::</span><span class="fu">PcrossVD</span>(<span class="at">data =</span> df, <span class="at">OPT =</span> SteepD)</span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 0.964588</span></span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>tictoc<span class="sc">::</span><span class="fu">toc</span>()</span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 5.58 sec elapsed</span></span></code></pre></div>
+<p>Usage example for K-fold cross validation.</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">445</span>)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">10000</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>x1 <span class="ot">&lt;-</span> <span class="fu">runif</span>(n)</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>x2 <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n)</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>x3 <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n)</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>x4 <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n)</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="dv">1</span><span class="fl">+3.6</span><span class="sc">*</span>x1 <span class="sc">+</span> <span class="fl">5.3</span><span class="sc">*</span>x2 <span class="sc">+</span> <span class="fl">4.2</span><span class="sc">*</span>x3 <span class="sc">+</span> <span class="fl">2.1</span><span class="sc">*</span>x4 <span class="sc">+</span> <span class="fu">rnorm</span>(n)</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="dv">1</span>, x1, x2, x3, x4)</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">X =</span> x, <span class="at">Y =</span> y)</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>tictoc<span class="sc">::</span><span class="fu">tic</span>()</span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a><span class="fu">CrossVD</span>(<span class="at">data =</span> df, <span class="at">K =</span> <span class="dv">10</span>, <span class="at">OPT =</span> SteepD)</span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 0.9993032</span></span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>tictoc<span class="sc">::</span><span class="fu">toc</span>()</span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 0.47 sec elapsed</span></span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>tictoc<span class="sc">::</span><span class="fu">tic</span>()</span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a><span class="fu">PcrossVD</span>(<span class="at">data =</span> df, <span class="at">K =</span> <span class="dv">10</span>, <span class="at">OPT =</span> SteepD)</span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 0.9983071</span></span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a>tictoc<span class="sc">::</span><span class="fu">toc</span>()</span>
+<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4.05 sec elapsed</span></span></code></pre></div>
+<p>The K-fold cross validation is less computational expensive than the
+leave-one-out counter part. Therefore the fixed costs of the
+parallelization exceeds its gain. However, if we increase the
+dimensionality of the problem, the advantages are clear.</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">445</span>)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">100000</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>k <span class="ot">&lt;-</span> <span class="dv">50</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">matrix</span>( <span class="fu">rnorm</span>( n<span class="sc">*</span>(k<span class="dv">-1</span>) ), <span class="at">nrow =</span> n, <span class="at">ncol =</span> (k<span class="dv">-1</span>))</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="dv">1</span>,X)</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>beta_true <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="at">n =</span> k)</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> X <span class="sc">%*%</span> beta_true <span class="sc">+</span> <span class="fu">rnorm</span>(n)</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">X =</span> X, <span class="at">Y =</span> y)</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>tictoc<span class="sc">::</span><span class="fu">tic</span>()</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a><span class="fu">CrossVD</span>(<span class="at">data =</span> df, <span class="at">K =</span> <span class="dv">10</span>, <span class="at">OPT =</span> SteepD)</span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 0.9991713</span></span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>tictoc<span class="sc">::</span><span class="fu">toc</span>()</span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 57.9 sec elapsed</span></span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>tictoc<span class="sc">::</span><span class="fu">tic</span>()</span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a><span class="fu">PcrossVD</span>(<span class="at">data =</span> df, <span class="at">K =</span> <span class="dv">10</span>, <span class="at">OPT =</span> SteepD)</span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 0.9991106</span></span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a>tictoc<span class="sc">::</span><span class="fu">toc</span>()</span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 50.57 sec elapsed</span></span></code></pre></div>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
