@@ -1,6 +1,6 @@
 Package: DescendMethods
 Title: Descend Methods for Linear Models
-Version: 0.0.0.9000
+Version: 1.0
 Authors@R: c(
     person("Luca", "Presicce", , "l.presicce@campus.unimib.it", role = c("cre", "aut")),
     person("Alessandro", "Colombi", , "a.colombi10@campus.unimib.it", role = c("aut"))
