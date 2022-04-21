@@ -206,6 +206,27 @@ An important disadvantage of `GradD()`, respect to `SteepD()`, is its dependence
 Then, not only the results provided by `SteepD()` are faster, but they are also more robusts, since they do not depend from another argument (the `stepsize`) which affects the optimization algorithm critically in the case of `GradD()`.
 
 
+### Benchmark on simulated data
+```{r}
+library(microbenchmark)
+
+set.seed(445)
+n <- 100
+k <- 5
+X <- cbind(1, matrix(runif(n*(k-1), 0, 10), nrow = n, ncol = (k-1)))
+beta_true <- rnorm(n = k)
+y <- X %*% beta_true + rnorm(n)
+df <- list(X = X, Y = y)
+
+microbenchmark(
+  BFGS = optim(par = rep(1, k), fn = LossD, X = X, Y = y, method = c("BFGS")),
+  CG = optim(par = rep(1, k), fn = LossD, X = X, Y = y, method = c("CG")),
+  SteepD = SteepD(data = df),
+  Gradd = GradD(data = df)
+)
+```
+
+
 ## Question 4 - Parallel cross-validation
 The package also provides two functions that perform a cross validation on predictive capability for a linear model, achieved by a set of parameters obtained throught an optimization process. They are `CrossVD()` and `PcrossVD()`, and they were written following two different flow of operation: sequential and parallel respectively. 
 
@@ -246,6 +267,82 @@ In both functions, we rely on the map-reduce paradigm. In the parallel version, 
 <!-- ``` -->
 <!-- We are aware that this is not an elegant solution and it would be nice to understand what is happening to solve the problem. -->
 
+
+## Prediction 
+The package also provides specific functions for prediction in linear models. 
+`PredictD` gets as input the estimated coefficients and the new covariates and returns the 
+pointwise estimation. To emulate the usage of the well know `stats::predict` function, the new
+data to be predicted must be a data.frame. However, none check is done on the order of the
+variables. Hence, the user is supposed to use the same ordering of the variables that is given
+by the vector of the estimated coefficients.
+`MseD` gets the estimated coefficients and the data and it return the
+Mean Squared error.
+
+
+### Cross Validation
+Usage example for leave-one-out cross validation.
+```{r}
+set.seed(445)
+n <- 1000
+x1 <- runif(n)
+x2 <- rnorm(n)
+x3 <- rnorm(n)
+x4 <- rnorm(n)
+y <- 1+3.6*x1 + 5.3*x2 + 4.2*x3 + 2.1*x4 + rnorm(n)
+x <- cbind(1, x1, x2, x3, x4)
+df <- list(X = x, Y = y)
+
+tictoc::tic()
+DescendMethods::CrossVD(data = df, OPT = SteepD)
+tictoc::toc()
+
+tictoc::tic()
+DescendMethods::PcrossVD(data = df, OPT = SteepD)
+tictoc::toc()
+
+```
+
+Usage example for K-fold cross validation.
+
+```{r}
+set.seed(445)
+n <- 10000
+x1 <- runif(n)
+x2 <- rnorm(n)
+x3 <- rnorm(n)
+x4 <- rnorm(n)
+y <- 1+3.6*x1 + 5.3*x2 + 4.2*x3 + 2.1*x4 + rnorm(n)
+x <- cbind(1, x1, x2, x3, x4)
+df <- list(X = x, Y = y)
+
+tictoc::tic()
+CrossVD(data = df, K = 10, OPT = SteepD)
+tictoc::toc()
+
+tictoc::tic()
+PcrossVD(data = df, K = 10, OPT = SteepD)
+tictoc::toc()
+```
+The K-fold cross validation is less computational expensive than the leave-one-out counter part. Therefore the fixed costs of the parallelization exceeds its gain. However, if we increase the dimensionality of the problem, the advantages are clear.
+
+```{r}
+set.seed(445)
+n <- 100000
+k <- 50
+X <- matrix( rnorm( n*(k-1) ), nrow = n, ncol = (k-1))
+X <- cbind(1,X)
+beta_true <- rnorm(n = k)
+y <- X %*% beta_true + rnorm(n)
+df <- list(X = X, Y = y)
+
+tictoc::tic()
+CrossVD(data = df, K = 10, OPT = SteepD)
+tictoc::toc()
+
+tictoc::tic()
+PcrossVD(data = df, K = 10, OPT = SteepD)
+tictoc::toc()
+```
 
 ## Examples 
 
@@ -361,109 +458,3 @@ t(res_opt$par)
 cat('\n Estimated values - lm \n')
 coef(res_lm)
 ```
-
-
-### Benchmark on simulated data
-```{r}
-library(microbenchmark)
-
-set.seed(445)
-n <- 100
-k <- 5
-X <- cbind(1, matrix(runif(n*(k-1), 0, 10), nrow = n, ncol = (k-1)))
-beta_true <- rnorm(n = k)
-y <- X %*% beta_true + rnorm(n)
-df <- list(X = X, Y = y)
-
-microbenchmark(
-  BFGS = optim(par = rep(1, k), fn = LossD, X = X, Y = y, method = c("BFGS")),
-  CG = optim(par = rep(1, k), fn = LossD, X = X, Y = y, method = c("CG")),
-  SteepD = SteepD(data = df),
-  Gradd = GradD(data = df)
-)
-```
-
-## Prediction 
-The package also provides specific functions for prediction in linear models. 
-`PredictD` gets as input the estimated coefficients and the new covariates and returns the 
-pointwise estimation. To emulate the usage of the well know `stats::predict` function, the new
-data to be predicted must be a data.frame. However, none check is done on the order of the
-variables. Hence, the user is supposed to use the same ordering of the variables that is given
-by the vector of the estimated coefficients.
-`MseD` gets the estimated coefficients and the data and it return the
-Mean Squared error.
-
-
-### Cross Validation
-Usage example for leave-one-out cross validation.
-```{r}
-set.seed(445)
-n <- 1000
-x1 <- runif(n)
-x2 <- rnorm(n)
-x3 <- rnorm(n)
-x4 <- rnorm(n)
-y <- 1+3.6*x1 + 5.3*x2 + 4.2*x3 + 2.1*x4 + rnorm(n)
-x <- cbind(1, x1, x2, x3, x4)
-df <- list(X = x, Y = y)
-
-tictoc::tic()
-DescendMethods::CrossVD(data = df, OPT = SteepD)
-tictoc::toc()
-
-tictoc::tic()
-DescendMethods::PcrossVD(data = df, OPT = SteepD)
-tictoc::toc()
-
-```
-
-Usage example for K-fold cross validation.
-
-```{r}
-set.seed(445)
-n <- 10000
-x1 <- runif(n)
-x2 <- rnorm(n)
-x3 <- rnorm(n)
-x4 <- rnorm(n)
-y <- 1+3.6*x1 + 5.3*x2 + 4.2*x3 + 2.1*x4 + rnorm(n)
-x <- cbind(1, x1, x2, x3, x4)
-df <- list(X = x, Y = y)
-
-tictoc::tic()
-CrossVD(data = df, K = 10, OPT = SteepD)
-tictoc::toc()
-
-tictoc::tic()
-PcrossVD(data = df, K = 10, OPT = SteepD)
-tictoc::toc()
-```
-The K-fold cross validation is less computational expensive than the leave-one-out counter part. Therefore the fixed costs of the parallelization exceeds its gain. However, if we increase the dimensionality of the problem, the advantages are clear.
-
-```{r}
-set.seed(445)
-n <- 100000
-k <- 50
-X <- matrix( rnorm( n*(k-1) ), nrow = n, ncol = (k-1))
-X <- cbind(1,X)
-beta_true <- rnorm(n = k)
-y <- X %*% beta_true + rnorm(n)
-df <- list(X = X, Y = y)
-
-tictoc::tic()
-CrossVD(data = df, K = 10, OPT = SteepD)
-tictoc::toc()
-
-tictoc::tic()
-PcrossVD(data = df, K = 10, OPT = SteepD)
-tictoc::toc()
-```
-
-
-
-
-
-
-
-
-
