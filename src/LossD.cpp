@@ -1,3 +1,4 @@
+#include "MyPerson.h"
 #include "RcppArmadillo.h"
 using namespace Rcpp;
 

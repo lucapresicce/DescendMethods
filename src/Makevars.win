@@ -1,12 +1,34 @@
-CXX_STD = CXX11
-PKG_CXXFLAGS = $(SHLIB_OPENMP_CXXFLAGS)
-PKG_LIBS = $(SHLIB_OPENMP_CXXFLAGS) $(LAPACK_LIBS) $(BLAS_LIBS) $(FLIBS)
-
-PROTOBUF_VERSION = 3.12.4
-PROTOBUF_WINLIB = ../windows/protobuf-${PROTOBUF_VERSION}
-PROTOC = $(PROTOBUF_WINLIB)/bin$(if ${R_ARCH}==/x64,64,32)/protoc
+CXX_STD = CXX17
 
 # Google protocol buffers flags
-PROTOBUF_INC = -I$(PROTOBUF_WINLIB)/include
-PROTOBUF_LIBS = -L$(PROTOBUF_WINLIB)/lib${subst gcc,,${COMPILED_BY}}${R_ARCH} \
-								-L$(PROTOBUF_WINLIB)/lib${R_ARCH} -lprotobuf
+PROTOBUF_INC = $(shell $(FOLDER)/bin/pkg-config --cflags protobuf)
+PROTOBUF_LIBS = $(shell $(FOLDER)/bin/pkg-config --libs protobuf)
+
+
+PKG_CXXFLAGS += $(PROTOBUF_INC) -I'.' -I'./cpp_proto' 
+PKG_LIBS = $(PROTOBUF_LIBS) 
+#-lstdc++fs
+
+# Setting Package sources and object files
+PROTO_DIR = ../inst/proto
+PROTO_SRC = $(wildcard $(PROTO_DIR)/*.proto)
+SOURCES = $(sort $(wildcard *.cpp)) \
+		  $(sort $(addprefix cpp_proto/, $(notdir $(PROTO_SRC:.proto=.pb.cc))))
+OBJECTS = $(addsuffix .o, $(basename $(SOURCES)))
+
+
+
+# Recipes
+.PHONY = all
+
+all: compile_protos $(SHLIB)
+
+compile_protos:
+	echo $(PWD)
+	@mkdir -p cpp_proto
+	@for file in $(PROTO_SRC); \
+		do \
+			$(PROTOC) -I$(PROTO_DIR) --cpp_out=./cpp_proto $${file}; \
+		done
+
+
