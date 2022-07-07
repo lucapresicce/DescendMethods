@@ -37,3 +37,6 @@ vignettes/*.pdf
 
 *.ini
 inst/doc
+
+# cpp_proto folder
+src/cpp_proto

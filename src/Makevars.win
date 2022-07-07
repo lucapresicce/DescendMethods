@@ -1,27 +1,25 @@
 CXX_STD = CXX17
 
-#RTOOLS_TMP = $(shell "echo '${RTOOLS40_HOME//\\//}'")
-#RTOOLS = /c$(RTOOLS_TMP)
+RTOOLS=$(addprefix /c/, $(notdir $(RTOOLS40_HOME)))
 
 ifeq ($(R_ARCH), /x64)
-	FOLDER = $(RTOOLS40_HOME)\mingw64
+	FOLDER = $(RTOOLS)/mingw64
 else
-	FOLDER = $(RTOOLS40_HOME)\mingw32
+	FOLDER = $(RTOOLS)/mingw32
 endif
 
 
 # Google protocol buffers flags
-PROTOBUF_INC = $(shell "$(FOLDER)\bin\pkg-config.exe --cflags protobuf")
-PROTOBUF_LIBS = $(shell "$(FOLDER)\bin\pkg-config.exe --libs protobuf")
-#PROTOC = $(FOLDER)/bin/protoc
+PROTOBUF_INC = $(shell $(FOLDER)/bin/pkg-config --cflags protobuf)
+PROTOBUF_LIBS = $(shell $(FOLDER)/bin/pkg-config --libs protobuf)
+PROTOC = $(FOLDER)/bin/protoc
 
 PKG_CXXFLAGS += $(PROTOBUF_INC) -I'.' -I'./cpp_proto' 
 PKG_LIBS = $(PROTOBUF_LIBS) 
 #-lstdc++fs
 
 # Setting Package sources and object files
-TMP = $(shell dirname $(CURDIR))
-PROTO_DIR = '../inst/proto'
+PROTO_DIR = ../inst/proto
 PROTO_SRC = $(wildcard $(PROTO_DIR)/*.proto)
 SOURCES = $(sort $(wildcard *.cpp)) \
 		  $(sort $(addprefix cpp_proto/, $(notdir $(PROTO_SRC:.proto=.pb.cc))))
@@ -34,11 +32,10 @@ OBJECTS = $(addsuffix .o, $(basename $(SOURCES)))
 all: compile_protos $(SHLIB)
 
 compile_protos:
-	echo $(PROTOBUF_INC)
-	mkdir -p cpp_proto
-	for file in $(PROTO_SRC); \
+	@mkdir -p cpp_proto
+	@for file in $(PROTO_SRC); \
 		do \
-			protoc -I$(PROTO_DIR) --cpp_out=./cpp_proto $${file}; \
+			$(PROTOC) -I$(PROTO_DIR) --cpp_out=./cpp_proto $${file}; \
 		done
 
 
