@@ -41,6 +41,11 @@ Rcpp::RawVector Proto_in_cplusplus() {
   Rcpp::RawVector out(msg.size());
   std::copy(msg.begin(), msg.end(), out.begin());
   
+  // Random number generation
+  double x = R::rnorm(0,1);
+  Rcpp::Rcout << "x = "<<x<<std::endl;
+  Rcpp::Vector xx = Rcpp::rnorm(3,0,1);
+  Rcpp::Rcout << "xx = "<<xx<<std::endl;
   return out;
 }
 
