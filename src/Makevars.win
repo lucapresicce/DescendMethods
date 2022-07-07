@@ -8,14 +8,17 @@ else
 	FOLDER = $(RTOOLS)/mingw32
 endif
 
+# GSL library flags
+GSL_INC = $(shell $(FOLDER)/bin/gsl-config --cflags)
+GSL_LIBS = $(shell $(FOLDER)/bin/gsl-config --libs)
 
 # Google protocol buffers flags
 PROTOBUF_INC = $(shell $(FOLDER)/bin/pkg-config --cflags protobuf)
 PROTOBUF_LIBS = $(shell $(FOLDER)/bin/pkg-config --libs protobuf)
 PROTOC = $(FOLDER)/bin/protoc
 
-PKG_CXXFLAGS += $(PROTOBUF_INC) -I'.' -I'./cpp_proto' 
-PKG_LIBS = $(PROTOBUF_LIBS) 
+PKG_CXXFLAGS += $(PROTOBUF_INC) $(GSL_INC) -I'.' -I'./cpp_proto' 
+PKG_LIBS = $(PROTOBUF_LIBS) $(GSL_LIBS)
 #-lstdc++fs
 
 # Setting Package sources and object files

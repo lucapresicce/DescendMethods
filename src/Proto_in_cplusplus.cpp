@@ -1,9 +1,13 @@
-#include "MySave.pb.h"
-// #include "RcppArmadillo.h"
-#include "Rcpp.h"
-// using namespace Rcpp;
+// [[Rcpp::depends(RcppEigen)]]
+// [[Rcpp::depends(RcppParallel)]]
+#define STRICT_R_HEADERS
+#include <Rcpp.h>
+#include <RcppEigen.h>
 
-// [[Rcpp::depends(RcppArmadillo)]]
+#include "MySave.pb.h"
+#include "GSL_wrappers.h"
+#include "Rcpp.h"
+
 
 // This is a simple example of exporting a C++ function to R. You can
 // source this function into an R session using the Rcpp::sourceCpp 

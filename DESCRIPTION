@@ -27,5 +27,5 @@ Imports:
     doSNOW
 LinkingTo: 
     Rcpp,
-    RcppArmadillo
+    RcppEigen (>= 0.3.3.9.1)
 VignetteBuilder: knitr
