@@ -1,3 +1,22 @@
+#' LossD
+#' 
+#'\loadmathjax This function evaluates the following quadratic loss function
+#'\mjsdeqn{L(\beta) = (X\beta - Y)^2}
+#'
+#'
+#' @param b [vector] the vector of \mjseqn{\beta} parameters in the formula above.
+#' @param X [matrix] the design matrix \code{X} in the formula above.
+#' @param Y [vector] the response vector \code{Y} in the formula above.
+#'
+#' @return  [double] the function evaluation
+#' @export
+LossD = function (b,X,Y) {
+  XbY = X * b - Y
+  res = t(XbY) * XbY
+  return (res)
+}
+
+
 #' Gradient Descend
 #'
 #' \loadmathjax Implements gradient descend method to find the coefficients \mjseqn{\beta} that minimize the following loss function

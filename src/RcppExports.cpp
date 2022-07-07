@@ -11,13 +11,13 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
-// LossD
-int LossD();
-RcppExport SEXP _DescendMethods_LossD() {
+// Proto_in_cplusplus
+Rcpp::RawVector Proto_in_cplusplus();
+RcppExport SEXP _DescendMethods_Proto_in_cplusplus() {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    rcpp_result_gen = Rcpp::wrap(LossD());
+    rcpp_result_gen = Rcpp::wrap(Proto_in_cplusplus());
     return rcpp_result_gen;
 END_RCPP
 }
@@ -34,7 +34,7 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_DescendMethods_LossD", (DL_FUNC) &_DescendMethods_LossD, 0},
+    {"_DescendMethods_Proto_in_cplusplus", (DL_FUNC) &_DescendMethods_Proto_in_cplusplus, 0},
     {"_DescendMethods_try_rcpp", (DL_FUNC) &_DescendMethods_try_rcpp, 1},
     {NULL, NULL, 0}
 };
