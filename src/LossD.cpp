@@ -1,4 +1,4 @@
-#include "MyPerson.h"
+#include "MyPerson.pb.h"
 #include "RcppArmadillo.h"
 using namespace Rcpp;
 
