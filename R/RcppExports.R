@@ -11,8 +11,8 @@
 #' 
 #' @return [double] the function evaluation
 #' @export
-LossD <- function(b, X, Y) {
-    .Call(`_DescendMethods_LossD`, b, X, Y)
+LossD <- function() {
+    .Call(`_DescendMethods_LossD`)
 }
 
 #' @export

@@ -1,6 +1,7 @@
 #include "MyPerson.pb.h"
-#include "RcppArmadillo.h"
-using namespace Rcpp;
+// #include "RcppArmadillo.h"
+#include "Rcpp.h"
+// using namespace Rcpp;
 
 // [[Rcpp::depends(RcppArmadillo)]]
 
@@ -27,11 +28,16 @@ using namespace Rcpp;
 //' @return [double] the function evaluation
 //' @export
 // [[Rcpp::export]]
-double LossD(arma::vec b, arma::mat X, arma::vec Y) {
-  arma::vec XbY = X * b - Y;
-  arma::mat res = XbY.t() * XbY;
-  return res(0);
+int LossD() {
+  Rcpp::Rcout << "Hello World!" << std::endl;
+  return 0;
 }
+
+// double LossD(arma::vec b, arma::mat X, arma::vec Y) {
+//   arma::vec XbY = X * b - Y;
+//   arma::mat res = XbY.t() * XbY;
+//   return res(0);
+// }
 
 
 
