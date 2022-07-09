@@ -8,6 +8,13 @@ Proto_in_cplusplus <- function() {
     .Call(`_DescendMethods_Proto_in_cplusplus`)
 }
 
+#' BayesLM
+#'
+#' @export
+BayesLM <- function(data, niter, burnin, mu0, Lambda0, b, D, mu_init, Sigma_init) {
+    .Call(`_DescendMethods_BayesLM`, data, niter, burnin, mu0, Lambda0, b, D, mu_init, Sigma_init)
+}
+
 #' @export
 try_rcpp <- function(x) {
     .Call(`_DescendMethods_try_rcpp`, x)

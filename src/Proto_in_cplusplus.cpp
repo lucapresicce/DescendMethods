@@ -54,19 +54,22 @@ Rcpp::RawVector Proto_in_cplusplus() {
 }
 
 
+//' BayesLM
+//'
+//' @export
+// [[Rcpp::export]]
 Rcpp::RawVector BayesLM(Eigen::MatrixXd const & data, unsigned int const & niter, unsigned int const & burnin,
-                        double const & mu0, Eigen::MatrixXd const & Lambda0,double const & b,Eigen::MatrixXd const & D,
-                        Eigen::MatrixXd const & mu_init, Eigen::MatrixXd const & Sigma_init){
+                        Eigen::VectorXd const & mu0, Eigen::MatrixXd const & Lambda0, double const & b,Eigen::MatrixXd D,
+                        Eigen::VectorXd const & mu_init, Eigen::MatrixXd const & Sigma_init){
 
   Rcpp::RawVector out;
-    unsigned int p = mu_init.size();
+  unsigned int p = mu_init.size();
   unsigned int n = data.rows();
   sample::rmvnorm rmv;
-  sample::rwish   rw;
-
-  Eigen::VectorXd ones(Eigen::VectorXd::Constant(p,1.0));
-  Eigen::VectorXd Id(Eigen::MatrixXd::Constant(p,p,1.0));
   
+  Eigen::VectorXd ones(Eigen::VectorXd::Constant(p,1.0));
+  Eigen::MatrixXd Id(Eigen::MatrixXd::Identity(p,p));
+ 
   Eigen::VectorXd mu(mu_init);
   Eigen::MatrixXd Sigma(Sigma_init);
   Eigen::MatrixXd K(Sigma_init.partialPivLu().solve(Id));
@@ -80,14 +83,15 @@ Rcpp::RawVector BayesLM(Eigen::MatrixXd const & data, unsigned int const & niter
     Eigen::MatrixXd Lambda_n = (invLambda0 + n*K).partialPivLu().solve(Id) ;
     Eigen::VectorXd mu_n = Lambda_n * (invLambda0mu0 + n*K) ;
     mu = rmv(mu_n,Lambda_n);
-    Rcpp::Rcout<<"mu: "<<std::endl<<mu<<std::endl;
+
     Eigen::MatrixXd U(Eigen::MatrixXd::Constant(p,p,0.0));
-    for(std::size_t j = 1; j<n; j++){
-      U += (data.row(j)-mu).transpose()*(data.row(j)-mu);
+    for(std::size_t j = 0; j<n; j++){
+      U += (data.row(j)-mu.transpose()).transpose()*(data.row(j)-mu.transpose());
     }
-    K = rw(b+n,D+U);
-    Rcpp::Rcout<<"K: "<<std::endl<<K<<std::endl;
+    Eigen::MatrixXd DU(D+U);
+    K = sample::rwish<Eigen::MatrixXd, sample::isChol::False>()((double)(b+n), DU);
   }
+  
   return out;
 }
 
