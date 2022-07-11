@@ -4,6 +4,8 @@
 #include <RcppEigen.h>
 
 #include "MySave.pb.h"
+#include "MyMatrix.pb.h"
+#include "SamplerState.pb.h"
 #include "GSL_wrappers.h"
 #include "Rcpp.h"
 #include <Eigen/LU>
@@ -59,7 +61,7 @@ Rcpp::RawVector Proto_in_cplusplus() {
 //' @export
 // [[Rcpp::export]]
 Rcpp::RawVector BayesLM(Eigen::MatrixXd const & data, unsigned int const & niter, unsigned int const & burnin,
-                        Eigen::VectorXd const & mu0, Eigen::MatrixXd const & Lambda0, double const & b,Eigen::MatrixXd D,
+                        Eigen::VectorXd const & mu0, Eigen::MatrixXd const & Lambda0, double const & b,Eigen::MatrixXd const & D,
                         Eigen::VectorXd const & mu_init, Eigen::MatrixXd const & Sigma_init){
 
   Rcpp::RawVector out;
@@ -90,6 +92,30 @@ Rcpp::RawVector BayesLM(Eigen::MatrixXd const & data, unsigned int const & niter
     }
     Eigen::MatrixXd DU(D+U);
     K = sample::rwish<Eigen::MatrixXd, sample::isChol::False>()((double)(b+n), DU);
+
+    if(i >= niter-burnin){
+      Rcpp::Rcout<<"i = "<<i<<std::endl;
+      // save
+      MyMatrix PrecSave; //create object
+      // Fill the message
+      PrecSave.set_rows(K.rows());
+      PrecSave.set_cols(K.cols());
+      *PrecSave.mutable_data() = {K.data(), K.data()+K.size()};
+      std::string Kser = PrecSave.SerializeAsString();
+
+      Rcpp::Rcout << "Serialized message: "<<Kser<<std::endl;
+      
+      State State_it; 
+      *State_it.mutable_mu() = {mu.data(), mu.data()+mu.size()};
+
+      State_it.mutable_prec()->set_rows(K.rows());
+      State_it.mutable_prec()->set_cols(K.cols());
+      *State_it.mutable_prec()->mutable_data() = {K.data(), K.data()+K.size()};
+      //State_it.set_Prec(PrecSave);
+
+      //out.push_back(State_it.SerializeAsString());
+      
+    }
   }
   
   return out;

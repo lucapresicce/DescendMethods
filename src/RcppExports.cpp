@@ -22,7 +22,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // BayesLM
-Rcpp::RawVector BayesLM(Eigen::MatrixXd const& data, unsigned int const& niter, unsigned int const& burnin, Eigen::VectorXd const& mu0, Eigen::MatrixXd const& Lambda0, double const& b, Eigen::MatrixXd D, Eigen::VectorXd const& mu_init, Eigen::MatrixXd const& Sigma_init);
+Rcpp::RawVector BayesLM(Eigen::MatrixXd const& data, unsigned int const& niter, unsigned int const& burnin, Eigen::VectorXd const& mu0, Eigen::MatrixXd const& Lambda0, double const& b, Eigen::MatrixXd const& D, Eigen::VectorXd const& mu_init, Eigen::MatrixXd const& Sigma_init);
 RcppExport SEXP _DescendMethods_BayesLM(SEXP dataSEXP, SEXP niterSEXP, SEXP burninSEXP, SEXP mu0SEXP, SEXP Lambda0SEXP, SEXP bSEXP, SEXP DSEXP, SEXP mu_initSEXP, SEXP Sigma_initSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -33,7 +33,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< Eigen::VectorXd const& >::type mu0(mu0SEXP);
     Rcpp::traits::input_parameter< Eigen::MatrixXd const& >::type Lambda0(Lambda0SEXP);
     Rcpp::traits::input_parameter< double const& >::type b(bSEXP);
-    Rcpp::traits::input_parameter< Eigen::MatrixXd >::type D(DSEXP);
+    Rcpp::traits::input_parameter< Eigen::MatrixXd const& >::type D(DSEXP);
     Rcpp::traits::input_parameter< Eigen::VectorXd const& >::type mu_init(mu_initSEXP);
     Rcpp::traits::input_parameter< Eigen::MatrixXd const& >::type Sigma_init(Sigma_initSEXP);
     rcpp_result_gen = Rcpp::wrap(BayesLM(data, niter, burnin, mu0, Lambda0, b, D, mu_init, Sigma_init));

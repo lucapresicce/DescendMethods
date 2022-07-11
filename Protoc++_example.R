@@ -29,8 +29,8 @@ mu_init = c(0,0)
 Sigma_init = diag(2)
 
 # Set number of iterations
-niter = 1
-burnin = 1
+niter = 10
+burnin = 3
 
 res = BayesLM(data,niter,burnin,mu0,Lambda0,b,D,mu_init,Sigma_init)
 
