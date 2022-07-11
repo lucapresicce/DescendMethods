@@ -92,8 +92,8 @@ std::vector<Rcpp::RawVector>
     for(std::size_t j = 0; j<n; j++){
       U += (data.row(j)-mu.transpose()).transpose()*(data.row(j)-mu.transpose());
     }
-    Eigen::MatrixXd DU(D+U);
-    K = sample::rwish<Eigen::MatrixXd, sample::isChol::False>()((double)(b+n), DU);
+    Eigen::MatrixXd Shape( (D+U).partialPivLu().solve(Id) );
+    K = sample::rwish<Eigen::MatrixXd, sample::isChol::False>()((double)(b+n), Shape);
 
     if(i >= burnin){
 
@@ -112,12 +112,11 @@ std::vector<Rcpp::RawVector>
       State State_it;  //Create state message
       *State_it.mutable_mu() = {mu.data(), mu.data()+mu.size()}; //save mean
 
-
-      Prec *p;  // Create pointer to nested message
-      p = State_it.add_prec(); // add object of nested message
-      p->set_rows(K.rows());
-      p->set_cols(K.cols());
-      *(p->mutable_data()) = {K.data(), K.data()+K.size()}; //save matrix
+      Prec *ptr;  // Create pointer to nested message
+      ptr = State_it.add_prec(); // add object of nested message
+      ptr->set_rows(K.rows());
+      ptr->set_cols(K.cols());
+      *(ptr->mutable_data()) = {K.data(), K.data()+K.size()}; //save matrix
 
       std::string s = State_it.SerializeAsString(); // serialization
       //Rcpp::Rcout << "Serialized message (2): "<<s<<std::endl; 
