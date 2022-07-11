@@ -22,7 +22,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // BayesLM
-Rcpp::RawVector BayesLM(Eigen::MatrixXd const& data, unsigned int const& niter, unsigned int const& burnin, Eigen::VectorXd const& mu0, Eigen::MatrixXd const& Lambda0, double const& b, Eigen::MatrixXd const& D, Eigen::VectorXd const& mu_init, Eigen::MatrixXd const& Sigma_init);
+std::vector<Rcpp::RawVector> BayesLM(Eigen::MatrixXd const& data, unsigned int const& niter, unsigned int const& burnin, Eigen::VectorXd const& mu0, Eigen::MatrixXd const& Lambda0, double const& b, Eigen::MatrixXd const& D, Eigen::VectorXd const& mu_init, Eigen::MatrixXd const& Sigma_init);
 RcppExport SEXP _DescendMethods_BayesLM(SEXP dataSEXP, SEXP niterSEXP, SEXP burninSEXP, SEXP mu0SEXP, SEXP Lambda0SEXP, SEXP bSEXP, SEXP DSEXP, SEXP mu_initSEXP, SEXP Sigma_initSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;

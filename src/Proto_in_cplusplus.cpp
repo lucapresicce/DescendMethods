@@ -60,11 +60,13 @@ Rcpp::RawVector Proto_in_cplusplus() {
 //'
 //' @export
 // [[Rcpp::export]]
-Rcpp::RawVector BayesLM(Eigen::MatrixXd const & data, unsigned int const & niter, unsigned int const & burnin,
+std::vector<Rcpp::RawVector>
+                BayesLM(Eigen::MatrixXd const & data, unsigned int const & niter, unsigned int const & burnin,
                         Eigen::VectorXd const & mu0, Eigen::MatrixXd const & Lambda0, double const & b,Eigen::MatrixXd const & D,
                         Eigen::VectorXd const & mu_init, Eigen::MatrixXd const & Sigma_init){
 
-  Rcpp::RawVector out;
+  std::vector<Rcpp::RawVector> out;
+  out.reserve(niter-burnin);
   unsigned int p = mu_init.size();
   unsigned int n = data.rows();
   sample::rmvnorm rmv;
@@ -93,28 +95,39 @@ Rcpp::RawVector BayesLM(Eigen::MatrixXd const & data, unsigned int const & niter
     Eigen::MatrixXd DU(D+U);
     K = sample::rwish<Eigen::MatrixXd, sample::isChol::False>()((double)(b+n), DU);
 
-    if(i >= niter-burnin){
-      Rcpp::Rcout<<"i = "<<i<<std::endl;
-      // save
+    if(i >= burnin){
+
+      /* 
+      Example: how to save a matrix
       MyMatrix PrecSave; //create object
+      
       // Fill the message
       PrecSave.set_rows(K.rows());
       PrecSave.set_cols(K.cols());
-      *PrecSave.mutable_data() = {K.data(), K.data()+K.size()};
+      *PrecSave.mutable_data() = {K.data(), K.data()+K.size()}; // save a buffer
       std::string Kser = PrecSave.SerializeAsString();
+      */
 
-      Rcpp::Rcout << "Serialized message: "<<Kser<<std::endl;
-      
-      State State_it; 
-      *State_it.mutable_mu() = {mu.data(), mu.data()+mu.size()};
+      // Save
+      State State_it;  //Create state message
+      *State_it.mutable_mu() = {mu.data(), mu.data()+mu.size()}; //save mean
 
-      State_it.mutable_prec()->set_rows(K.rows());
-      State_it.mutable_prec()->set_cols(K.cols());
-      *State_it.mutable_prec()->mutable_data() = {K.data(), K.data()+K.size()};
-      //State_it.set_Prec(PrecSave);
 
-      //out.push_back(State_it.SerializeAsString());
-      
+      Prec *p;  // Create pointer to nested message
+      p = State_it.add_prec(); // add object of nested message
+      p->set_rows(K.rows());
+      p->set_cols(K.cols());
+      *(p->mutable_data()) = {K.data(), K.data()+K.size()}; //save matrix
+
+      std::string s = State_it.SerializeAsString(); // serialization
+      //Rcpp::Rcout << "Serialized message (2): "<<s<<std::endl; 
+
+      // Cast string into RawVector
+      Rcpp::RawVector out_raw(s.size());
+      std::copy(s.begin(), s.end(), out_raw.begin());
+
+      // Fill return object
+      out.push_back(out_raw);
     }
   }
   

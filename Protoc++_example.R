@@ -29,13 +29,18 @@ mu_init = c(0,0)
 Sigma_init = diag(2)
 
 # Set number of iterations
-niter = 10
-burnin = 3
+niter = 5
+burnin = 0
 
 res = BayesLM(data,niter,burnin,mu0,Lambda0,b,D,mu_init,Sigma_init)
 
 
+# Read proto file in R
+RProtoBuf::readProtoFiles(dir = "./inst/proto")
+ls("RProtoBuf:DescriptorPool")
 
+# Read message in R
+R_res = ReadFromProto(res)
 
 
 

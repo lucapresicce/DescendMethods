@@ -1,6 +1,12 @@
 syntax = "proto3";
-import = "MyMatrix.proto"
+
+message Prec {
+	uint32 rows = 1;
+	uint32 cols = 2;
+	repeated double data = 3 [packed=true];
+}
+
 message State {
-	repeated double mu = 3;
-	MyMatrix prec = 5;
+	repeated Prec prec = 1;
+	repeated double mu = 2;
 }
