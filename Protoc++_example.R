@@ -78,5 +78,6 @@ data %>% as_tibble() %>%
              inherit.aes = F) 
 
 
-
+# ggsave(filename = "G:/Il mio Drive/BicoccaDrive/Corsi/Big Data Managment/FinalPlot.pdf",
+#         device = "pdf")
 
