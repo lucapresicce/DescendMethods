@@ -75,7 +75,6 @@ std::vector<Rcpp::RawVector>
   Eigen::MatrixXd Id(Eigen::MatrixXd::Identity(p,p));
  
   Eigen::VectorXd mu(mu_init);
-  Eigen::MatrixXd Sigma(Sigma_init);
   Eigen::MatrixXd K(Sigma_init.partialPivLu().solve(Id));
   
   Eigen::VectorXd invLambda0mu0(Lambda0.partialPivLu().solve(mu0));
@@ -85,9 +84,10 @@ std::vector<Rcpp::RawVector>
   // Start MCMC
   for(std::size_t i = 0; i < niter; i++){
     Eigen::MatrixXd Lambda_n = (invLambda0 + n*K).partialPivLu().solve(Id) ;
-    Eigen::VectorXd mu_n = Lambda_n * (invLambda0mu0 + n*K) ;
+    Eigen::VectorXd mu_n = Lambda_n * (invLambda0mu0 + n*K*data_mean) ;
+    
     mu = rmv(mu_n,Lambda_n);
-
+    
     Eigen::MatrixXd U(Eigen::MatrixXd::Constant(p,p,0.0));
     for(std::size_t j = 0; j<n; j++){
       U += (data.row(j)-mu.transpose()).transpose()*(data.row(j)-mu.transpose());
