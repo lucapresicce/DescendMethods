@@ -4,7 +4,6 @@
 #include <RcppEigen.h>
 
 #include "MySave.pb.h"
-#include "MyMatrix.pb.h"
 #include "SamplerState.pb.h"
 #include "GSL_wrappers.h"
 #include "Rcpp.h"
